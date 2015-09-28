@@ -1,2 +1,47 @@
-# nscabinet
-Upload to Netsuite File Cabinet
+# upsuite
+
+Upload files to a netsuite account, using the included _restlet_.
+
+## Usage
+
+```javascript
+
+var up = require('upsuite')
+
+fs.createReadStream('foo.js')
+	.pipe(up({
+		email : 'foo@bar.baz.com' ,
+		password : '123456' ,
+		account : '123456' ,
+		realm : 'sandbox.netsuite.com' ,
+		role : 3 ,
+		rootPath : 'SuiteScripts/MyProject'
+		script : 95 ,
+		deployment : 1
+	}))
+
+```
+
+ * `realm` is optional. Defaults to `netsuite.com`.
+	
+ * `role` is optional. Defaults to the account's default role.
+	
+ * `script` and `deployment` may also take the scriptId (i.e. `customscript_something`) as parameter.
+	
+ * `deployment` is optional. Defaults to 1.
+	
+ * `rootPath` is optional. Defaults to `SuiteScripts`. May also take a number as input.
+
+ ## Input
+
+The parameters may be stored in `~/ns/config.json` or in environment variables.
+
+For environment variables, prefix the options with "NSCONF_" and write in uppercase.
+
+The following priority is taken for each parameter
+
+ 	1. Direct code input
+
+ 	2. `~/ns/config.json`
+
+ 	3. Environment variables

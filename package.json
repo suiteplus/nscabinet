@@ -1,0 +1,29 @@
+{
+  "name": "upsuite",
+  "version": "0.0.1",
+  "description": "Upload files to netsuite.",
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">=2.1.5"
+  },
+  "main": "upsuite.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/suiteplus/upsuite.git"
+  },
+  "keywords": [
+    "netsuite"
+  ],
+  "author": "Suiteplus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/suiteplus/upsuite/issues"
+  },
+  "homepage": "https://github.com/suiteplus/upsuite#readme",
+  "devDependencies": {
+    "request": "^2.64.0"
+  }
+}
