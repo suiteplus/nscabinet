@@ -1,4 +1,4 @@
-# upsuite
+# nscabinet
 
 Upload files to a netsuite account, using the included _restlet_.
 
@@ -6,7 +6,7 @@ Upload files to a netsuite account, using the included _restlet_.
 
 ```javascript
 
-var up = require('upsuite')
+var up = require('nscabinet')
 
 fs.createReadStream('foo.js')
 	.pipe(up({
@@ -22,7 +22,7 @@ fs.createReadStream('foo.js')
 
 ```
 
- * `realm` is optional. Defaults to `netsuite.com`.
+ * `realm` is optional. Defaults to `system.netsuite.com`.
 	
  * `role` is optional. Defaults to the account's default role.
 	
@@ -40,8 +40,8 @@ For environment variables, prefix the options with "NSCONF_" and write in upperc
 
 The following priority is taken for each parameter
 
- 	1. Direct code input
+ 1. Direct code input
 
- 	2. `~/ns/config.json`
+ 2. `~/ns/config.json`
 
- 	3. Environment variables
+ 3. Environment variables

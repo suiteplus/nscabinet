@@ -11,7 +11,7 @@ module.exports = ( params ) => {
     if (!params.account) throw 'No account defined'
     if (!params.rootPath) throw 'No destination root path defined'
     if (!params.script) throw 'No script defined'
-    params.realm = params.realm || 'sandbox.netsuite.com'
+    params.realm = params.realm || 'system.netsuite.com'
     params.deployment = params.deployment || 1
     params.method = params.method || 'POST'
 
