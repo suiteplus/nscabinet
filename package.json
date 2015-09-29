@@ -1,6 +1,6 @@
 {
   "name": "upsuite",
-  "version": "0.0.1",
+  "version": "0.2.0",
   "description": "Upload files to netsuite.",
   "engines": {
     "node": ">= 4.0.0",
@@ -8,7 +8,7 @@
   },
   "main": "upsuite.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -24,10 +24,21 @@
   },
   "homepage": "https://github.com/suiteplus/upsuite#readme",
   "devDependencies": {
-    "request": "^2.64.0"
+    "cp": "^0.2.0",
+    "eslint": "^1.5.1",
+    "eslint-plugin-mocha": "^1.0.0",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^1.0.0",
+    "gulp-mocha": "^2.1.3",
+    "rimraf": "^2.4.3",
+    "should": "^7.1.0"
   },
   "dependencies": {
     "JSONStream": "^1.0.6",
+    "lodash.assign": "^3.2.0",
+    "osenv": "^0.1.3",
+    "request": "^2.64.0",
+    "through2": "^2.0.0",
     "vinyl-fs": "^2.1.1"
   }
 }

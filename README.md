@@ -6,9 +6,10 @@ Upload files to a netsuite account, using the included _restlet_.
 
 ```javascript
 
-var up = require('nscabinet')
+var up = require('nscabinet') ,
+	vinyl = require('vinyl-fs')
 
-fs.createReadStream('foo.js')
+vinyl.src('foo.js')
 	.pipe(up({
 		email : 'foo@bar.baz.com' ,
 		password : '123456' ,
@@ -38,10 +39,12 @@ The parameters may be stored in `~/ns/config.json` or in environment variables.
 
 For environment variables, prefix the options with "NSCONF_" and write in uppercase.
 
-The following priority is taken for each parameter
+The following priority is taken for each parameter (using `_.extend`)
 
  1. Direct code input
 
- 2. `~/ns/config.json`
+ 2. `./nsconfig.json`
+
+ 2. `~/.ns/nsconfig.json`
 
  3. Environment variables
