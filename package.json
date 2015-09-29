@@ -25,5 +25,9 @@
   "homepage": "https://github.com/suiteplus/upsuite#readme",
   "devDependencies": {
     "request": "^2.64.0"
+  },
+  "dependencies": {
+    "JSONStream": "^1.0.6",
+    "vinyl-fs": "^2.1.1"
   }
 }
