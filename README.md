@@ -1,6 +1,6 @@
 # nscabinet
 
-Upload files to a netsuite account, using the included _restlet_.
+Upload/download files to a netsuite account, using the included _restlet_.
 
 ## nscabinet.upload
 
