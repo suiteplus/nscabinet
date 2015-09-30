@@ -27,3 +27,4 @@ build/Release
 node_modules
 nsconfig.json
 *.temp
+test/output

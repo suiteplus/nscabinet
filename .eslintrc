@@ -16,7 +16,8 @@
 			2,
 			"never"
 		],
-		"no-undef": 0
+		"no-undef": 0 ,
+        "no-console" : 0
 	},
 	"env": {
 		"es6": true,

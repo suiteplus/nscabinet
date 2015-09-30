@@ -5,11 +5,15 @@ var gulp = require('gulp'),
         mocha: require('gulp-mocha')
     }
 
+var PATHS ={
+    alljs : ['src/*.js','test/*.js','restlet/*.js']
+}
+
 gulp.task('eslint', () => {
 
     var el = plugins.eslint
 
-    return gulp.src('./*.js')
+    return gulp.src(PATHS.alljs)
         .pipe(el())
         .pipe(el.format())
         .pipe(el.failAfterError())
@@ -24,6 +28,6 @@ gulp.task('tests', () => {
 
 gulp.task('watch', () => {
 
-    gulp.watch('./*.js', ['eslint'])
+    gulp.watch(PATHS.alljs, ['eslint'])
 
 })

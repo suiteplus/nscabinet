@@ -1,12 +1,12 @@
 {
-  "name": "upsuite",
-  "version": "0.2.0",
-  "description": "Upload files to netsuite.",
+  "name": "nscabinet",
+  "version": "0.3.0-pre",
+  "description": "Upload and download files from netsuite.",
   "engines": {
     "node": ">= 4.0.0",
     "npm": ">=2.1.5"
   },
-  "main": "upsuite.js",
+  "main": "src/nscabinet.js",
   "scripts": {
     "test": "mocha"
   },
@@ -31,7 +31,8 @@
     "gulp-eslint": "^1.0.0",
     "gulp-mocha": "^2.1.3",
     "rimraf": "^2.4.3",
-    "should": "^7.1.0"
+    "should": "^7.1.0",
+    "vinyl": "^1.0.0"
   },
   "dependencies": {
     "JSONStream": "^1.0.6",

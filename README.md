@@ -2,15 +2,15 @@
 
 Upload files to a netsuite account, using the included _restlet_.
 
-## Usage
+## nscabinet.upload
 
 ```javascript
 
-var up = require('nscabinet') ,
-	vinyl = require('vinyl-fs')
+var nscabinet = require('nscabinet') ,
+	vinylfs = require('vinyl-fs')
 
-vinyl.src('foo.js')
-	.pipe(up({
+vinylfs.src('foo.js')
+	.pipe(nscabinet({
 		email : 'foo@bar.baz.com' ,
 		password : '123456' ,
 		account : '123456' ,
@@ -23,17 +23,34 @@ vinyl.src('foo.js')
 
 ```
 
- * `realm` is optional. Defaults to `system.netsuite.com`.
+ * `realm` defaults to `system.netsuite.com`.
 	
- * `role` is optional. Defaults to the account's default role.
+ * `role` defaults to the account's default role.
 	
- * `script` and `deployment` may also take the scriptId (i.e. `customscript_something`) as parameter.
+ * `deployment` defaults to 1.
 	
- * `deployment` is optional. Defaults to 1.
-	
- * `rootPath` is optional. Defaults to `SuiteScripts`. May also take a number as input.
+ * `rootPath` defaults to `/SuiteScripts`. Must begin with `/`.
 
- ## Input
+## nscabinet.download( files , [opts] )
+
+```javascript
+
+nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
+	.pipe(vinylfs.dest('local'))
+
+```
+
+  * `files` file selector (one or many).
+    
+    * `*` is accepted on the file part, which is replaced by `%` on the netsuite file search.
+    
+    * Paths are also relative to `opts.rootPath`. If a file selector begins with `/`, files will be queried
+      by absolute path in netsuite, but saved locally inside the `cabinet_root` folder.
+  
+  * `opts` The same options as seen in upload.
+
+
+## Input options
 
 The parameters may be stored in `~/ns/config.json` or in environment variables.
 

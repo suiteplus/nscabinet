@@ -1,10 +1,13 @@
 var should = require('should'),
     vinyl = require('vinyl-fs'),
-    nscabinet = require('../nscabinet.js'),
+    nscabinet = require('../src/nscabinet.js'),
     through = require('through2'),
-    jsonStream = require('JSONStream')
+    jsonStream = require('JSONStream'),
+    fs = require('fs')
 
-describe('Upload a file...', () => {
+describe('Upload and download a file...', function() {
+
+    this.timeout(10000)
 
     it('is the login set up?', () => {
 
@@ -63,4 +66,30 @@ describe('Upload a file...', () => {
 
     })
 
+
+    it('download back our file' , function(done) {
+
+        this.timeout(120000)
+
+        try {
+            fs.mkdirSync(`test/output`)
+        } catch (e) {
+            if (e.code != 'EEXIST') throw e
+        }
+
+        nscabinet.download('test/uploadme.txt')
+            .pipe(vinyl.dest('test/output'))
+            .on('finish' , () => {
+
+                var outpath = 'test/output/test/uploadme.txt'
+
+                should(fs.existsSync(outpath)).be.true()
+                should(fs.readFileSync(outpath).toString()).be.equal('content\ncontent')
+                done()
+
+            })
+
+    })
+
 })
+

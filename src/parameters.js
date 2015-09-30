@@ -24,10 +24,9 @@ var PARAMS_DEF = [
     {name: 'account', required: true},
     {name: 'realm', def: 'system.netsuite.com'},
     {name: 'role'},
-    {name: 'rootPath', def: 'SuiteScripts'},
+    {name: 'rootPath', def: '/SuiteScripts'},
     {name: 'script', required: true},
-    {name: 'deployment', def: 1},
-    {name: 'method', def: 'POST'}
+    {name: 'deployment', def: 1}
 ] //ps: default is reserved word
 
 function readConfFile(path) {
@@ -58,12 +57,16 @@ function readConfEnvVar() {
 
 function checkParams(params, nothrow) {
 
-    return PARAMS_DEF.reduce((prev, curr) => {
+    var out = PARAMS_DEF.reduce((prev, curr) => {
 
         if (!params[curr.name] && curr.required && !nothrow) throw Error(`No ${curr.name} defined.`)
         prev[curr.name] = params[curr.name] || curr.def
         return prev
 
     }, {})
+
+    if (!String(out.rootPath).startsWith('/')) throw Error('rootPath must begin with /')
+
+    return out
 
 }
