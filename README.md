@@ -5,7 +5,7 @@ Upload/download files to a netsuite account, using the included _restlet_.
 ## Required
  * node.js 4+
 
-## Install
+## Install [![Dependency Status][david-image]][david-url] [![devDependency Status][david-image-dev]][david-url-dev]
 ```bash
     npm install nscabinet
 ```
@@ -60,7 +60,7 @@ nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
 
 ## Input options
 
-The parameters may be stored in `~/ns/nsconfig.json` or in environment variables.
+The parameters may be stored in `~/ns/config.json` or in environment variables.
 
 For environment variables, prefix the options with "NSCONF_" and write in uppercase.
 
@@ -77,3 +77,9 @@ The following priority is taken for each parameter (using `_.extend`)
 
 [npm-url]: https://npmjs.org/package/nscabinet
 [npm-image]: http://img.shields.io/npm/v/nscabinet.svg
+
+[david-url]: https://david-dm.org/suiteplus/nscabinet
+[david-image]: https://david-dm.org/suiteplus/nscabinet.svg
+
+[david-url-dev]: https://david-dm.org/suiteplus/nscabinet#info=devDependencies
+[david-image-dev]: https://david-dm.org/suiteplus/nscabinet/dev-status.svg
