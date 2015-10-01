@@ -18,7 +18,7 @@ describe('Reading the config files... ', () => {
         var ext1 = inverse ? '.temp' : ''
         var ext2 = inverse ? '' : '.temp'
 
-        if (fs.existsSync(path)) {
+        if (fs.existsSync(path+ext1)) {
             cp.sync(path + ext1, path + ext2)
         }
 
