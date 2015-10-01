@@ -60,7 +60,7 @@ nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
 
 ## Input options
 
-The parameters may be stored in `~/ns/config.json` or in environment variables.
+The parameters may be stored in `~/ns/nsconfig.json` or in environment variables.
 
 For environment variables, prefix the options with "NSCONF_" and write in uppercase.
 
