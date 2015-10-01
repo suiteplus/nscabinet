@@ -1,6 +1,14 @@
-# nscabinet
+# nscabinet  [![NPM version][npm-image]][npm-url]
 
 Upload/download files to a netsuite account, using the included _restlet_.
+
+## Required
+ * node.js 4+
+
+## Install
+```bash
+    npm install nscabinet
+```
 
 ## nscabinet.upload
 
@@ -65,3 +73,7 @@ The following priority is taken for each parameter (using `_.extend`)
  2. `~/.ns/nsconfig.json`
 
  3. Environment variables
+
+
+[npm-url]: https://npmjs.org/package/nscabinet
+[npm-image]: http://img.shields.io/npm/v/nscabinet.svg
