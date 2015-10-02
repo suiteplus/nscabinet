@@ -73,6 +73,8 @@ out.download = (files,params) => {
                     contents : new Buffer(file.contents,'base64')
                 })
 
+                console.log(`Got file ${file.path}.`)
+
                 this.emit('data',vynFile)
 
             })
@@ -84,6 +86,7 @@ out.download = (files,params) => {
     )
 
     return request( toRequest )
+        .pipe(es.split())
         .pipe(es.parse())
         .pipe(emitter)
 

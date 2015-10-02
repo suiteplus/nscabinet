@@ -8,3 +8,6 @@
 
  * `nscabinet.download`
  
+## 0.3.x
+
+ * CLI

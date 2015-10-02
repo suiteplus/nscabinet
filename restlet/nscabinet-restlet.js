@@ -13,6 +13,8 @@ var post = function (datain) {
 
     //ROUTER
 
+    log(datain)
+
     switch(datain.action) {
     case 'download':
         return download(datain)
@@ -36,7 +38,7 @@ var upload = function(datain) {
         file.setFolder(info.folderid)
         var r = JSON.stringify(nlapiSubmitFile(file))
         nlapiLogExecution('ERROR', 'up!', r)
-        return {message: 'Uploaded to file id ' + r, fileid: Number(r)}
+        return {message: 'Uploaded ' + info.filename + ' to file id ' + r , fileid: Number(r)}
     }
 
 }

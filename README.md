@@ -77,3 +77,21 @@ The following priority is taken for each parameter (using `_.extend`)
 
 [npm-url]: https://npmjs.org/package/nscabinet
 [npm-image]: http://img.shields.io/npm/v/nscabinet.svg
+
+
+## CLI
+
+	npm install -g nscabinet
+
+```bash
+$ nscabinet u file.txt  --rootpath /SuiteScripts/MyProject
+$ nscabinet u file.txt -p /SuiteScripts/MyProject
+$ nscabinet u file.txt
+$ nscabinet d remote.txt --rootPath /Downloads
+$ nscabinet d remote.txt -p /Downloads
+$ nscabinet d remote.txt
+```
+
+Takes in the same arguments (lowercased).
+
+As usual, the arguments are defaulted from `nsconfig.json`.
