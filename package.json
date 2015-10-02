@@ -13,18 +13,26 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/suiteplus/upsuite.git"
+    "url": "git+https://github.com/suiteplus/nscabinet.git"
   },
   "keywords": [
-    "netsuite"
+    "netsuite",
+    "suitecript",
+    "suitlet",
+    "restlet",
+    "cabinet",
+    "suiteplus",
+    "suite",
+    "s+"
   ],
   "author": "Suiteplus",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/suiteplus/upsuite/issues"
+    "url": "https://github.com/suiteplus/nscabinet/issues"
   },
-  "homepage": "https://github.com/suiteplus/upsuite#readme",
+  "homepage": "https://github.com/suiteplus/nscabinet#readme",
   "devDependencies": {
+    "body-parser": "^1.14.1",
     "coveralls": "^2.11.4",
     "cp": "^0.2.0",
     "eslint": "^1.5.1",
