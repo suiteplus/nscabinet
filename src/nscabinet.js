@@ -16,6 +16,8 @@ var out = (params) => {
         var that = this,
             path = chunk.path.substr(chunk.cwd.length + 1)
 
+        console.log('Uploading ' + path + ' to ' + params.rootPath )
+
         var toRequest = requestOpts(params)
         toRequest.json = {
             action : 'upload',
@@ -76,6 +78,8 @@ out.download = (files,params) => {
                 this.emit('error',data.error)
                 return
             }
+
+            data.files = data.files || []
 
             data.files.forEach( file => {
 

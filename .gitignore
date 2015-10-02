@@ -28,3 +28,5 @@ node_modules
 nsconfig.json
 *.temp
 test/output
+file1.js
+file2.js

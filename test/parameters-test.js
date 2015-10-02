@@ -14,19 +14,16 @@ function myrand() {
 describe('Reading the config files... ', () => {
 
     function cpIfExists(path, inverse) {
-
         var ext1 = inverse ? '.temp' : ''
         var ext2 = inverse ? '' : '.temp'
-
         if (fs.existsSync(path+ext1)) {
             cp.sync(path + ext1, path + ext2)
         }
-
     }
+
 
     //backups your files
     before(() => {
-
         try {
             fs.mkdirSync(`${osenv.home()}/.ns`)
         } catch (e) {
@@ -42,12 +39,11 @@ describe('Reading the config files... ', () => {
         }, {})
 
         fs.writeFileSync('nsconfigenv.json.temp', JSON.stringify(envBackup))
-
     })
+
 
     //restores your files
     after(() => {
-
         cpIfExists(`${osenv.home()}/.ns/nsconfig.json`, true)
         cpIfExists('./nsconfig.json', true)
 
@@ -65,21 +61,19 @@ describe('Reading the config files... ', () => {
         //rimraf.sync('./nsconfig.json.temp')
         rimraf.sync('./nsconfig.json')
         //rimraf.sync('nsconfigenv.json.temp')
-
     })
 
-    beforeEach(() => {
 
+    beforeEach(() => {
         fs.writeFileSync(`${osenv.home()}/.ns/nsconfig.json`, '')
         fs.writeFileSync('./nsconfig.json', '')
         Object.keys(process.env).forEach(key => {
             if (key.startsWith('NSCONF_')) process.env[key] = ''
         })
-
     })
 
-    it('reads email from global config file', () => {
 
+    it('reads email from global config file', () => {
         var name = `globalemail${myrand()}`
 
         fs.writeFileSync(`${osenv.home()}/.ns/nsconfig.json`,
@@ -88,11 +82,10 @@ describe('Reading the config files... ', () => {
         var params = checkParams({}, true)
 
         should(params).have.property('email', name)
-
     })
 
-    it('reads email from local config file', () => {
 
+    it('reads email from local config file', () => {
         var name = `localemail${myrand()}`
 
         fs.writeFileSync('./nsconfig.json',
@@ -101,21 +94,19 @@ describe('Reading the config files... ', () => {
         var params = checkParams({}, true)
 
         should(params).have.property('email', name)
-
     })
 
-    it('reads email from environment variable', () => {
 
+    it('reads email from environment variable', () => {
         var name = `localemail${myrand()}`
         process.env.NSCONF_EMAIL = name
         var params = checkParams({}, true)
 
         should(params).have.property('email', name)
-
     })
 
-    it('overrides global setting with local ones', () => {
 
+    it('overrides global setting with local ones', () => {
         var nameGlobal = `globalemail${myrand()}`
         fs.writeFileSync(`${osenv.home()}/.ns/nsconfig.json`,
             JSON.stringify({email: nameGlobal})
@@ -129,7 +120,6 @@ describe('Reading the config files... ', () => {
         var params = checkParams({}, true)
 
         should(params).have.property('email', nameLocal)
-
     })
 
 })

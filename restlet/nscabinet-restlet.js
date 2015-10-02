@@ -1,9 +1,13 @@
 /* eslint-env node:false */
 /* eslint no-unused-vars: 0*/
 
-function log(txt) {
+function log() {
 
-    nlapiLogExecution('ERROR','log',JSON.stringify(txt))
+    var txt = []
+    for ( var it in arguments ) {
+        txt.push(arguments[it])
+    }
+    nlapiLogExecution('DEBUG','log',JSON.stringify(txt))
 
 }
 
@@ -47,38 +51,64 @@ var download = function(datain) {
 
     if (!(datain.files instanceof Array)) datain.files = [datain.files]
 
+    function getFileData(file,info) {
+
+        var contents = file.getValue()
+
+        if ( ~NON_BINARY_FILETYPES.indexOf(file.getType()) )
+            contents = nlapiEncrypt(contents,'base64')
+
+        return {
+            path : info.baserelative + file.getName(),
+            contents : contents
+        }
+
+    }
+
     var outfiles = []
 
     datain.files.forEach( function(glob){
 
         var info = pathInfo(glob, datain.rootpath)
 
-        var filter = [
-            [ 'name' , 'contains' , info.filename.replace(/\*/g,'%') ] , 'and' ,
-            [ 'folder' , 'anyof' , info.folderid ]
-        ]
+        //found out nlapiSearchRecord('file') filtered by folder returns a recursive search,
+        //which turns out to be nasty for performance.
+        //so, split in 2 cases. If the path seems to be absolute, load directly. If not, execute the search.
+        if( /\*|\%/g.test(glob) ) {
 
-        var columns =
-            ['name','filetype'].map( function(i){return new nlobjSearchColumn(i)})
+            var filter = [
+                [ 'name' , 'contains' , info.filename.replace(/\*/g,'%') ] , 'and' ,
+                [ 'folder' , 'anyof' , info.folderid ]
+            ]
 
-        var addFiles =
-            (nlapiSearchRecord('file', null , filter , columns ) || [])
-                .map( function(resFile) {
+            log(filter)
 
-                    var contents = nlapiLoadFile(resFile.getId()).getValue() ,
-                        filename = resFile.getValue('name')
+            var columns =
+                ['name','filetype','folder'].map( function(i){return new nlobjSearchColumn(i)})
 
-                    if ( ~NON_BINARY_FILETYPES.indexOf(resFile.getValue('filetype')) )
-                        contents = nlapiEncrypt(contents,'base64')
+            var addFiles =
+                (nlapiSearchRecord('file', null , filter , columns ) || [])
+                    .filter( function(resFile) {
 
-                    return {
-                        path : info.pathrelative,
-                        contents : contents
-                    }
+                        return resFile.getValue('folder') == info.folderid
 
-                })
+                    })
+                    .map( function(resFile) {
 
-        outfiles = outfiles.concat(addFiles)
+                        var file = nlapiLoadFile(resFile.getId())
+                        return getFileData(file,info)
+
+                    })
+
+            outfiles = outfiles.concat(addFiles)
+
+        //case 2: direct load
+        } else {
+
+            var file = nlapiLoadFile(info.pathabsolute.substr(1))
+            outfiles = outfiles.concat([getFileData(file,info)])
+
+        }
 
     })
 
@@ -174,6 +204,7 @@ function pathInfo( pathIn, basePath , createFolders) {
     out.nsfileext = EXT_TYPES[out.fileext] || 'PLAINTEXT'
     out.pathabsolute = abspath
     out.pathrelative = absolute ? abspath : abspath.substr(basePath.length + 1)
+    out.baserelative = out.pathrelative.substr(0,out.pathrelative.length-out.filename.length)
 
     return out
 

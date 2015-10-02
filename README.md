@@ -1,5 +1,4 @@
-# nscabinet [![NPM version][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
+# nscabinet [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
 
 Upload/download files to a netsuite account, using the included _restlet_.
 
@@ -64,7 +63,7 @@ nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
 
 ## Input options
 
-The parameters may be stored in `~/ns/nsconfig.json` or in environment variables.
+The parameters may be stored in `~/.ns/nsconfig.json` or in environment variables.
 
 For environment variables, prefix the options with "NSCONF_" and write in uppercase.
 
@@ -85,15 +84,17 @@ The following priority is taken for each parameter (using `_.extend`)
 	npm install -g nscabinet
 
 ```bash
-$ nscabinet u file.txt --rootpath /SuiteScripts/MyProject
-$ nscabinet u file.txt -p /SuiteScripts/MyProject
-$ nscabinet u file.txt
-$ nscabinet d remote.txt --rootPath /Downloads
-$ nscabinet d remote.txt -p /Downloads
-$ nscabinet d remote.txt
+$ nscabinet u "file.txt" --rootpath "/SuiteScripts/MyProject"
+$ nscabinet u "file.txt" -p "/SuiteScripts/MyProject"
+$ nscabinet u "file.txt"
+$ nscabinet d "remote.txt" --rootPath "/Downloads"
+$ nscabinet d "remote.txt" -p "/Downloads"
+$ nscabinet d "remote.txt"
 ```
 
 Takes in the same arguments (lowercased).
+
+Encase path parameters in string quotes (avoids bash expansion).
 
 As usual, the arguments are defaulted from `nsconfig.json`.
 
@@ -102,7 +103,7 @@ As usual, the arguments are defaulted from `nsconfig.json`.
 **Note about development tests**
 
 The unit tests run in `gulp development` expect that you first define a
-netsuite environment using any of the last 3 configuration options outlines above.
+netsuite environment using `~/.ns/nsconfig.json`.
 
 For that you also need to deploy the restlet in your target netsuite testing account.
 

@@ -22,22 +22,13 @@ describe('Upload and download a file...', function() {
 
         vinyl.src('test/__input-files/uploadme.txt')
             .pipe(nscabinet())
-            .pipe(through.obj(function (chunk, enc, callback) {
+            .pipe(vinyl.dest('output'))
+            .on('finish' , function() {
 
-                var that = this
-                var concat
-                chunk.nscabinetResponse
-                    .pipe(jsonStream.parse())
-                    .on('data', json => {
-                        concat = json
-                    }).on('end', () => {
-                        should(concat).have.property('fileid').be.Number()
-                        that.push(null)
-                        callback()
-                        done()
-                    })
+                should(fs.existsSync('output'))
+                done()
 
-            }))
+            })
 
     })
 
@@ -71,8 +62,6 @@ describe('Upload and download a file...', function() {
 
     it('download back our file' , function(done) {
 
-        this.timeout(120000)
-
         try {
             fs.mkdirSync(`test/output`)
         } catch (e) {
@@ -91,6 +80,27 @@ describe('Upload and download a file...', function() {
 
             })
 
+    })
+
+
+    it('upload two files. download them using a wildcard' , function(done) {
+        this.timeout(20000)
+
+        fs.writeFileSync('test/__input-files/file1.js','hello 1')
+        fs.writeFileSync('test/__input-files/file2.js','hello 2')
+
+        vinyl.src('test/__input-files/*.js').pipe(nscabinet())
+            .on('finish' , () => {
+                nscabinet.download('test/__input-files/*.js').pipe(vinyl.dest('test/output')).on('finish' , () => {
+                    should(fs.existsSync('test/output/test/__input-files/file1.js')).be.true()
+                    should(fs.readFileSync('test/output/test/__input-files/file1.js').toString()).be.equal('hello 1')
+
+                    should(fs.existsSync('test/output/test/__input-files/file2.js')).be.true()
+                    should(fs.readFileSync('test/output/test/__input-files/file2.js').toString()).be.equal('hello 2')
+
+                    done()
+                })
+            })
     })
 
 

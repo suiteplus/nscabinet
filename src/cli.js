@@ -22,8 +22,6 @@ var cabinet = require('./nscabinet.js'),
 var action = yarr._[0],
     file = yarr._[1]
 
-
-
 var opts = {}
 
 for (var it in yarr) {
