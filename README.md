@@ -82,8 +82,8 @@ The following priority is taken for each parameter (using `_.extend`)
 [travis-url]: https://travis-ci.org/suiteplus/nscabinet
 [travis-image]: https://img.shields.io/travis/suiteplus/nscabinet.svg
 
-[coveralls-url]: https://coveralls.io/r/suiteplus/nsmockup
-[coveralls-image]: http://img.shields.io/coveralls/suiteplus/nsmockup/master.svg
+[coveralls-url]: https://coveralls.io/r/suiteplus/nscabinet
+[coveralls-image]: http://img.shields.io/coveralls/suiteplus/nscabinet/master.svg
 
 [david-url]: https://david-dm.org/suiteplus/nscabinet
 [david-image]: https://david-dm.org/suiteplus/nscabinet.svg

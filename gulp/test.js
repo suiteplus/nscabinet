@@ -43,7 +43,7 @@ gulp.task('test:eslint', function () {
         .pipe(plugins.eslint.failAfterError());
 });
 
-gulp.task('test:coverage', function (cb) {
+gulp.task('test:coverage', function () {
     var deferred = require('q').defer();
 
     let executeTests = function () {
@@ -62,16 +62,15 @@ gulp.task('test:coverage', function (cb) {
     };
 
     // instrumentation nsapi.js
-    //gulp.src(paths.jsRequire)
-    //    .pipe(plugins.plumber())
-    //    .pipe(plugins.istanbul({
-    //        includeUntested: true,
-    //        instrumenter: require('isparta').Instrumenter
-    //
-    //    })) // Covering files
-    //    .pipe(plugins.istanbul.hookRequire())// Force `require` to return covered files
-    //    .on('finish', () => executeTests());
-    executeTests();
+    gulp.src(paths.jsRequire)
+        .pipe(plugins.plumber())
+        .pipe(plugins.istanbul({
+            includeUntested: true,
+            instrumenter: require('isparta').Instrumenter
+
+        })) // Covering files
+        .pipe(plugins.istanbul.hookRequire())// Force `require` to return covered files
+        .on('finish', () => executeTests());
     return deferred.promise;
 });
 
