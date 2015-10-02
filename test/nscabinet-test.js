@@ -15,6 +15,7 @@ describe('Upload and download a file...', function() {
 
     })
 
+
     it('upload it!', function (done) {
 
         this.timeout(10000)
@@ -39,6 +40,7 @@ describe('Upload and download a file...', function() {
             }))
 
     })
+
 
     it('force auth error', function (done) {
 
@@ -77,11 +79,11 @@ describe('Upload and download a file...', function() {
             if (e.code != 'EEXIST') throw e
         }
 
-        nscabinet.download('test/__input-files/uploadme.txt')
+        nscabinet.download('uploadme.txt')
             .pipe(vinyl.dest('test/output'))
             .on('finish' , () => {
 
-                var outpath = 'test/output/test/uploadme.txt'
+                var outpath = 'test/output/uploadme.txt'
 
                 should(fs.existsSync(outpath)).be.true()
                 should(fs.readFileSync(outpath).toString()).be.equal('content\ncontent')
@@ -90,6 +92,7 @@ describe('Upload and download a file...', function() {
             })
 
     })
+
 
 })
 

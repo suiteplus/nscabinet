@@ -1,5 +1,5 @@
 var fs = require('fs'),
-    checkParams = require('../.'),
+    checkParams = require('../.').checkParams,
     should = require('should'),
     osenv = require('osenv'),
     cp = require('cp'),
@@ -61,9 +61,10 @@ describe('Reading the config files... ', () => {
             //ignore for now
         }
 
-        rimraf.sync(`${osenv.home()}/.ns/nsconfig.json.temp`)
-        rimraf.sync('./nsconfig.json.temp')
-        rimraf.sync('nsconfigenv.json.temp')
+        //rimraf.sync(`${osenv.home()}/.ns/nsconfig.json.temp`)
+        //rimraf.sync('./nsconfig.json.temp')
+        rimraf.sync('./nsconfig.json')
+        //rimraf.sync('nsconfigenv.json.temp')
 
     })
 

@@ -3,7 +3,10 @@
 
 Upload/download files to a netsuite account, using the included _restlet_.
 
+_PS: This is also a gulp plugin. A `gulp-nscabinet` wrapper module is coming soon™._
+
 ## Required
+
  * node.js 4+
 
 ## Install [![Dependency Status][david-image]][david-url] [![devDependency Status][david-image-dev]][david-url-dev]
@@ -82,7 +85,7 @@ The following priority is taken for each parameter (using `_.extend`)
 	npm install -g nscabinet
 
 ```bash
-$ nscabinet u file.txt  --rootpath /SuiteScripts/MyProject
+$ nscabinet u file.txt --rootpath /SuiteScripts/MyProject
 $ nscabinet u file.txt -p /SuiteScripts/MyProject
 $ nscabinet u file.txt
 $ nscabinet d remote.txt --rootPath /Downloads
@@ -93,6 +96,22 @@ $ nscabinet d remote.txt
 Takes in the same arguments (lowercased).
 
 As usual, the arguments are defaulted from `nsconfig.json`.
+
+## Contribution
+
+**Note about development tests**
+
+The unit tests run in `gulp development` expect that you first define a
+netsuite environment using any of the last 3 configuration options outlines above.
+
+For that you also need to deploy the restlet in your target netsuite testing account.
+
+
+**Note about automated tests**
+
+The automated tests (the ones within `gulp tests`) are designed to run using the
+[netsuite mockup](https://github.com/suiteplus/nsmockup). So a netsuite account is
+not required for those.
 
 
 [travis-url]: https://travis-ci.org/suiteplus/nscabinet

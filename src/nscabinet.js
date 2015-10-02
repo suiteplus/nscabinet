@@ -2,7 +2,6 @@
 
 var request = require('request'),
     through = require('through2'),
-    jsonStream = require('JSONStream'),
     checkParams = require('./parameters.js'),
     vinyl = require('vinyl'),
     es = require('event-stream')
@@ -29,8 +28,22 @@ var out = (params) => {
 
             chunk.nscabinetResponse = response
             that.push(chunk)
-            response.pipe(jsonStream.parse('error.code')).pipe(process.stdout)
-            response.pipe(jsonStream.parse('message')).pipe(process.stdout)
+
+            var logger = es.through( function write(data){
+
+                if (data.message) console.log(data.message)
+                if (data.error) console.log(`${data.error.code} - ${data.error.message}`)
+                if (data.error && data.error.code == 'INVALID_LOGIN_CREDENTIALS') console.log(`Email: ${params.email}`)
+
+                this.emit('end')
+
+            })
+
+            response
+                .pipe(es.split())
+                .pipe(es.parse())
+                .pipe(logger)
+
             callback()
 
         })
