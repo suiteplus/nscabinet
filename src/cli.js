@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 var yarr = require('yargs')
     .usage('Usage: nscabinet <command> <file> [options]')
     .command('u','Upload.')

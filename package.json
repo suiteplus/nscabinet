@@ -52,10 +52,10 @@
     "require-dir": "^0.3.0",
     "rimraf": "^2.4.3",
     "should": "^7.1.0",
-    "through": "^2.3.8",
-    "vinyl": "^1.0.0"
+    "through": "^2.3.8"
   },
   "dependencies": {
+    "vinyl": "^1.0.0",
     "JSONStream": "^1.0.6",
     "event-stream": "^3.3.1",
     "lodash.assign": "^3.2.0",
