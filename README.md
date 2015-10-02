@@ -1,11 +1,12 @@
-# nscabinet  [![NPM version][npm-image]][npm-url]
+# nscabinet [![NPM version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
 
 Upload/download files to a netsuite account, using the included _restlet_.
 
 ## Required
  * node.js 4+
 
-## Install
+## Install [![Dependency Status][david-image]][david-url] [![devDependency Status][david-image-dev]][david-url-dev]
 ```bash
     npm install nscabinet
 ```
@@ -75,9 +76,6 @@ The following priority is taken for each parameter (using `_.extend`)
  3. Environment variables
 
 
-[npm-url]: https://npmjs.org/package/nscabinet
-[npm-image]: http://img.shields.io/npm/v/nscabinet.svg
-
 
 ## CLI
 
@@ -95,3 +93,19 @@ $ nscabinet d remote.txt
 Takes in the same arguments (lowercased).
 
 As usual, the arguments are defaulted from `nsconfig.json`.
+
+
+[travis-url]: https://travis-ci.org/suiteplus/nscabinet
+[travis-image]: https://img.shields.io/travis/suiteplus/nscabinet.svg
+
+[coveralls-url]: https://coveralls.io/r/suiteplus/nscabinet
+[coveralls-image]: http://img.shields.io/coveralls/suiteplus/nscabinet/master.svg
+
+[david-url]: https://david-dm.org/suiteplus/nscabinet
+[david-image]: https://david-dm.org/suiteplus/nscabinet.svg
+
+[david-url-dev]: https://david-dm.org/suiteplus/nscabinet#info=devDependencies
+[david-image-dev]: https://david-dm.org/suiteplus/nscabinet/dev-status.svg
+
+[npm-url]: https://npmjs.org/package/nscabinet
+[npm-image]: http://img.shields.io/npm/v/nscabinet.svg
