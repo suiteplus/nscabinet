@@ -13,6 +13,23 @@ _PS: This is also a gulp plugin. A `gulp-nscabinet` wrapper module is coming soo
     npm install nscabinet
 ```
 
+## Input options
+
+The parameters may be stored in `~/.ns/nsconfig.json`, in environment variables, or passed directly.
+
+For environment variables, prefix the options with "NSCONF_" and write in uppercase.
+
+The following priority is taken for each parameter (using `_.extend`)
+
+ 1. Direct code input
+
+ 2. `./nsconfig.json`
+
+ 2. `~/.ns/nsconfig.json`
+
+ 3. Environment variables
+
+
 ## nscabinet.upload
 
 ```javascript
@@ -59,24 +76,6 @@ nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
       by absolute path in netsuite, but saved locally inside the `cabinet_root` folder.
   
   * `opts` The same options as seen in upload.
-
-
-## Input options
-
-The parameters may be stored in `~/.ns/nsconfig.json` or in environment variables.
-
-For environment variables, prefix the options with "NSCONF_" and write in uppercase.
-
-The following priority is taken for each parameter (using `_.extend`)
-
- 1. Direct code input
-
- 2. `./nsconfig.json`
-
- 2. `~/.ns/nsconfig.json`
-
- 3. Environment variables
-
 
 
 ## CLI
