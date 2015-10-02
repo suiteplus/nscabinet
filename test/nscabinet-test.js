@@ -1,6 +1,6 @@
 var should = require('should'),
     vinyl = require('vinyl-fs'),
-    nscabinet = require('../src/nscabinet.js'),
+    nscabinet = require('../.'),
     through = require('through2'),
     jsonStream = require('JSONStream'),
     fs = require('fs')
@@ -19,7 +19,7 @@ describe('Upload and download a file...', function() {
 
         this.timeout(10000)
 
-        vinyl.src('test/uploadme.txt')
+        vinyl.src('test/__input-files/uploadme.txt')
             .pipe(nscabinet())
             .pipe(through.obj(function (chunk, enc, callback) {
 
@@ -44,7 +44,7 @@ describe('Upload and download a file...', function() {
 
         this.timeout(10000)
 
-        vinyl.src('test/uploadme.txt')
+        vinyl.src('test/__input-files/uploadme.txt')
             .pipe(nscabinet({email: 'anyemail'}))
             .pipe(through.obj(function (chunk, enc, callback) {
 
@@ -77,7 +77,7 @@ describe('Upload and download a file...', function() {
             if (e.code != 'EEXIST') throw e
         }
 
-        nscabinet.download('test/uploadme.txt')
+        nscabinet.download('test/__input-files/uploadme.txt')
             .pipe(vinyl.dest('test/output'))
             .on('finish' , () => {
 

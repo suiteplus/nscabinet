@@ -95,10 +95,11 @@ module.exports = out
 
 function requestOpts(params) {
 
-    var nlauthRolePortion = ( params.role ) ? `,nlauth_role=${params.role}` : ''
+    var nlauthRolePortion = ( params.role ) ? `,nlauth_role=${params.role}` : '',
+        server = process.env.NS_SERVER || `https://rest.${params.realm}/app/site/hosting/restlet.nl`
 
     return {
-        url: `https://rest.${params.realm}/app/site/hosting/restlet.nl`,
+        url: server,
         qs: {
             script: params.script,
             deploy: params.deployment

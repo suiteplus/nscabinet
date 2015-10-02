@@ -1,5 +1,5 @@
 var fs = require('fs'),
-    checkParams = require('../src/parameters.js'),
+    checkParams = require('../.'),
     should = require('should'),
     osenv = require('osenv'),
     cp = require('cp'),
