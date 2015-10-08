@@ -23,7 +23,7 @@ The following priority is taken for each parameter (using `_.extend`)
 
  1. Direct code input
 
- 2. `./nsconfig.json`
+ 2. `./nsconfig.json`, then `../nsconfig.json`, up to 3 levels.
 
  2. `~/.ns/nsconfig.json`
 
@@ -96,6 +96,16 @@ Takes in the same arguments (lowercased).
 Encase path parameters in string quotes (avoids bash expansion).
 
 As usual, the arguments are defaulted from `nsconfig.json`.
+
+Sent file paths are taken relative to the config file path. Ex:
+
+```bash
+$ nscabinet u file.txt
+Uploading file.txt to /SuiteScripts
+$ cd Views
+$ Views nscabinet u view.html
+Uploading Views/view.html to /SuiteScripts
+```
 
 ## Contribution
 

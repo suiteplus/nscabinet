@@ -7,14 +7,14 @@ var request = require('request'),
     es = require('event-stream')
 
 
-var out = (params) => {
+module.exports = (params) => {
 
     params = checkParams(params)
 
     return through.obj(function (chunk, enc, callback) {
 
         var that = this,
-            path = chunk.path.substr(chunk.cwd.length + 1)
+            path = chunk.path.substr((checkParams.CONF_CWD||chunk.cwd).length + 1)
 
         console.log('Uploading ' + path + ' to ' + params.rootPath )
 
@@ -35,7 +35,9 @@ var out = (params) => {
 
                 if (data.message) console.log(data.message)
                 if (data.error) console.log(`${data.error.code} - ${data.error.message}`)
-                if (data.error && data.error.code == 'INVALID_LOGIN_CREDENTIALS') console.log(`Email: ${params.email}`)
+                if (data.error && data.error.code == 'INVALID_LOGIN_CREDENTIALS') {
+                    console.log(`Email: ${params.email}`)
+                }
 
                 this.emit('end')
 
@@ -54,11 +56,11 @@ var out = (params) => {
 
 }
 
-out.upload = out
+module.exports.upload = module.exports
 
-out.checkParams = checkParams
+module.exports.checkParams = checkParams
 
-out.download = (files,params) => {
+module.exports.download = (files,params) => {
 
     params = checkParams(params)
 
@@ -109,9 +111,7 @@ out.download = (files,params) => {
 
 }
 
-module.exports = out
 
-//private below here
 
 function requestOpts(params) {
 

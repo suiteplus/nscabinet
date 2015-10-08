@@ -1,6 +1,6 @@
 {
   "name": "nscabinet",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Upload and download files from netsuite.",
   "engines": {
     "node": ">= 4.0.0",
@@ -21,7 +21,7 @@
   "keywords": [
     "netsuite",
     "suitecript",
-    "suitlet",
+    "suitelet",
     "restlet",
     "cabinet",
     "suiteplus",
