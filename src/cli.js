@@ -16,29 +16,29 @@ var yarr = require('yargs')
     .describe('role')
     .describe('script','Script id.')
     .describe('deployment','Deployment id.')
-    .argv
+    .argv;
 
 var cabinet = require('./nscabinet.js'),
-    vinylfs = require('vinyl-fs')
+    vinylfs = require('vinyl-fs');
 
 var action = yarr._[0],
-    file = yarr._[1]
+    file = yarr._[1];
 
-var opts = {}
+var opts = {};
 
 for (var it in yarr) {
-    if (yarr[it] !== undefined) opts[it] = yarr[it]
+    if (yarr[it] !== undefined) opts[it] = yarr[it];
 }
-if (opts.rootpath) opts.rootPath = opts.rootpath
+if (opts.rootpath) opts.rootPath = opts.rootpath;
 
 if ( action == 'u' ) {
 
-    vinylfs.src(file).pipe(cabinet(opts))
+    vinylfs.src(file).pipe(cabinet(opts));
 
 } else if ( action == 'd' ) {
 
-    cabinet.download(file,opts).pipe(vinylfs.dest('.'))
+    cabinet.download(file,opts).pipe(vinylfs.dest('.'));
 
 }
 
-process.on('exit' , () => { console.log('\n') })
+process.on('exit' , () => { console.log('\n'); });

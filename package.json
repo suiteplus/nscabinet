@@ -1,6 +1,6 @@
 {
   "name": "nscabinet",
-  "version": "0.4.0-pre",
+  "version": "0.4.0",
   "description": "Upload and download files from netsuite.",
   "engines": {
     "node": ">= 4.0.0",
@@ -21,7 +21,7 @@
   "keywords": [
     "netsuite",
     "suitecript",
-    "suitlet",
+    "suitelet",
     "restlet",
     "cabinet",
     "suiteplus",
@@ -55,13 +55,14 @@
     "through": "^2.3.8"
   },
   "dependencies": {
-    "vinyl": "^1.0.0",
     "JSONStream": "^1.0.6",
     "event-stream": "^3.3.1",
     "lodash.assign": "^3.2.0",
+    "nsconfig": "^0.3.0",
     "osenv": "^0.1.3",
     "request": "^2.64.0",
     "through2": "^2.0.0",
+    "vinyl": "^1.0.0",
     "vinyl-fs": "^2.1.1",
     "yargs": "^3.26.0"
   }
