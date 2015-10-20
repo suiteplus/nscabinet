@@ -2,7 +2,7 @@
 
 Upload/download files to a netsuite account, using the included _restlet_.
 
-_PS: This is also a gulp plugin. A `gulp-nscabinet` wrapper module is coming soon™._
+_PS: This is actually also a gulp plugin. A `gulp-nscabinet` wrapper module is also available._
 
 ## Required
 
