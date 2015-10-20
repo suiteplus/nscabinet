@@ -107,21 +107,11 @@ $ Views nscabinet u view.html
 Uploading Views/view.html to /SuiteScripts
 ```
 
-## Contribution
+## Gulp tasks
 
-**Note about development tests**
+**gulp/slim.js** is for straightforward tasks: lint and unit tests.
 
-The unit tests run in `gulp development` expect that you first define a
-netsuite environment using `~/.ns/nsconfig.json`.
-
-For that you also need to deploy the restlet in your target netsuite testing account.
-
-
-**Note about automated tests**
-
-The automated tests (the ones within `gulp tests`) are designed to run using the
-[netsuite mockup](https://github.com/suiteplus/nsmockup). So a netsuite account is
-not required for those.
+**gulp/test.js** is for more involved things.
 
 
 [travis-url]: https://travis-ci.org/suiteplus/nscabinet
