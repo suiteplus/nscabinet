@@ -109,7 +109,7 @@ Uploading Views/view.html to /SuiteScripts
 
 ## Gulp tasks
 
-**gulp/slim.js** is for straightforward tasks: lint and unit tests.
+**gulp/development.js** is for straightforward tasks: lint and unit tests.
 
 **gulp/test.js** is for more involved things.
 
