@@ -2,127 +2,120 @@
 /* eslint no-unused-vars: 0*/
 
 function log() {
-
     var txt = [];
-    for ( var it in arguments ) {
+    for (var it in arguments) {
         txt.push(arguments[it]);
     }
-    nlapiLogExecution('DEBUG','log',JSON.stringify(txt));
-
+    nlapiLogExecution('DEBUG', 'log', JSON.stringify(txt));
 }
 
 var post = function (datain) {
-
     'use strict';
 
     //ROUTER
 
     log(datain);
 
-    switch(datain.action) {
-    case 'download':
-        return download(datain);
-    case 'upload':
-        return upload(datain);
+    switch (datain.action) {
+        case 'download':
+            return download(datain);
+        case 'upload':
+            return upload(datain);
     }
-
 };
 
-var upload = function(datain) {
-
+var upload = function (datain) {
     var body = nlapiDecrypt(datain.content, 'base64');
 
-    if (!datain.filepath) throw nlapiCreateError('PARAM_ERR','No file path specified', true);
-    if (!datain.rootpath) throw nlapiCreateError('PARAM_ERR','No destination root path specified', true);
+    if (!datain.filepath) throw nlapiCreateError('PARAM_ERR', 'No file path specified', true);
+    if (!datain.rootpath) throw nlapiCreateError('PARAM_ERR', 'No destination root path specified', true);
 
-    var info = pathInfo(datain.filepath, datain.rootpath,true);
+    var info = pathInfo(datain.filepath, datain.rootpath, true);
 
     if (info.filename) {
         var file = nlapiCreateFile(info.filename, info.nsfileext, body);
         file.setFolder(info.folderid);
         var r = JSON.stringify(nlapiSubmitFile(file));
         nlapiLogExecution('ERROR', 'up!', r);
-        return {message: 'Uploaded ' + info.filename + ' to file id ' + r , fileid: Number(r)};
+        return {message: 'Uploaded ' + info.filename + ' to file id ' + r, fileid: Number(r)};
     }
-
 };
 
-var download = function(datain) {
-
+var download = function (datain) {
     if (!(datain.files instanceof Array)) datain.files = [datain.files];
 
-    function getFileData(file,info) {
+    function getFileData(file, info) {
 
         var contents = file.getValue();
 
-        if ( ~NON_BINARY_FILETYPES.indexOf(file.getType()) )
-            contents = nlapiEncrypt(contents,'base64');
+        if (~NON_BINARY_FILETYPES.indexOf(file.getType()))
+            contents = nlapiEncrypt(contents, 'base64');
 
         return {
-            path : info.baserelative + file.getName(),
-            contents : contents
+            path: info.baserelative + file.getName(),
+            contents: contents
         };
 
     }
 
     var outfiles = [];
 
-    datain.files.forEach( function(glob){
+    datain.files.forEach(function (glob) {
 
         var info = pathInfo(glob, datain.rootpath);
 
         //found out nlapiSearchRecord('file') filtered by folder returns a recursive search,
         //which turns out to be nasty for performance.
         //so, split in 2 cases. If the path seems to be absolute, load directly. If not, execute the search.
-        if( /\*|\%/g.test(glob) ) {
+        if (/\*|\%/g.test(glob)) {
 
             var filter = [
-                [ 'name' , 'contains' , info.filename.replace(/\*/g,'%') ] , 'and' ,
-                [ 'folder' , 'anyof' , info.folderid ]
+                ['name', 'contains', info.filename.replace(/\*/g, '%')], 'and',
+                ['folder', 'anyof', info.folderid]
             ];
 
             log(filter);
 
             var columns =
-                ['name','filetype','folder'].map( function(i){return new nlobjSearchColumn(i);});
+                ['name', 'filetype', 'folder'].map(function (i) {
+                    return new nlobjSearchColumn(i);
+                });
 
             var addFiles =
-                (nlapiSearchRecord('file', null , filter , columns ) || [])
-                    .filter( function(resFile) {
+                (nlapiSearchRecord('file', null, filter, columns) || [])
+                    .filter(function (resFile) {
 
                         return resFile.getValue('folder') == info.folderid;
 
                     })
-                    .map( function(resFile) {
+                    .map(function (resFile) {
 
                         var file = nlapiLoadFile(resFile.getId());
-                        return getFileData(file,info);
+                        return getFileData(file, info);
 
                     });
 
             outfiles = outfiles.concat(addFiles);
 
-        //case 2: direct load
+            //case 2: direct load
         } else {
 
             var file = nlapiLoadFile(info.pathabsolute.substr(1));
-            outfiles = outfiles.concat([getFileData(file,info)]);
+            outfiles = outfiles.concat([getFileData(file, info)]);
 
         }
 
     });
 
     return {
-        files : outfiles
+        files: outfiles
     };
-
 };
 
 
-
 var NON_BINARY_FILETYPES = [
-    'CSV' , 'HTMLDOC' , 'JAVASCRIPT' , 'MESSAGERFC' , 'PLAINTEXT'
-    , 'POSTSCRIPT' , 'RTF' , 'SMS' , 'STYLESHEET' , 'XMLDOC'
+    'CSV', 'HTMLDOC', 'JAVASCRIPT', 'MESSAGERFC', 'PLAINTEXT'
+    , 'POSTSCRIPT', 'RTF', 'SMS', 'STYLESHEET', 'XMLDOC'
 ];
 
 var EXT_TYPES = {
@@ -159,8 +152,7 @@ var EXT_TYPES = {
 };
 
 
-function pathInfo( pathIn, basePath , createFolders) {
-
+function pathInfo(pathIn, basePath, createFolders) {
     'use strict';
 
     var absolute;
@@ -204,8 +196,7 @@ function pathInfo( pathIn, basePath , createFolders) {
     out.nsfileext = EXT_TYPES[out.fileext] || 'PLAINTEXT';
     out.pathabsolute = abspath;
     out.pathrelative = absolute ? abspath : abspath.substr(basePath.length + 1);
-    out.baserelative = out.pathrelative.substr(0,out.pathrelative.length-out.filename.length);
+    out.baserelative = out.pathrelative.substr(0, out.pathrelative.length - out.filename.length);
 
     return out;
-
 }
