@@ -72,3 +72,5 @@ gulp.task('test:coverage', function () {
         .on('finish', () => executeTests());
     return deferred.promise;
 });
+
+gulp.task('test', ['env:test', 'test:eslint', 'test:coverage']);

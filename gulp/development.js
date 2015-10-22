@@ -21,3 +21,5 @@ gulp.task('dev:mocha', () => {
         .pipe(plugins.plumber())
         .pipe(plugins.mocha());
 });
+
+gulp.task('development', ['env:development', 'dev:eslint', 'dev:mocha']);
