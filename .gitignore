@@ -30,3 +30,5 @@ nsconfig.json
 test/output
 file1.js
 file2.js
+.nsmockup
+.nscabinet

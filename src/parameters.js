@@ -4,14 +4,12 @@ var nsconfig = require('nsconfig');
 
 var PARAMS_DEF = [
     {name: 'rootPath', def: '/SuiteScripts'},
-    {name: 'script', required: true},
+    {name: 'script', def: process.env.NSCONF_SCRIPT},
     {name: 'deployment', def: 1}
 ];
 
-module.exports = function(override,noThrow) {
-
-    var out = nsconfig(override,PARAMS_DEF,noThrow);
+module.exports = function (override, noThrow) {
+    var out = nsconfig(override, PARAMS_DEF, noThrow);
     if (!out.rootPath.startsWith('/')) throw Error('rootPath must begin with /');
     return out;
-
 };

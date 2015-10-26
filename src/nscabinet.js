@@ -7,7 +7,6 @@ var request = require('request'),
     es = require('event-stream');
 
 module.exports = (params) => {
-
     params = checkParams(params);
 
     return through.obj(function (chunk, enc, callback) {
@@ -113,7 +112,6 @@ module.exports.download = (files,params) => {
 
 
 function requestOpts(params) {
-
     var nlauthRolePortion = ( params.role ) ? `,nlauth_role=${params.role}` : '',
         server = process.env.NS_SERVER || `https://rest.${params.realm}/app/site/hosting/restlet.nl`;
 
@@ -128,5 +126,4 @@ function requestOpts(params) {
             authorization: `NLAuth nlauth_account=${params.account},nlauth_email=${params.email},nlauth_signature=${params.password}${nlauthRolePortion}`
         }
     };
-
 }
