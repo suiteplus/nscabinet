@@ -37,6 +37,9 @@ var upload = function (datain) {
     if (info.filename) {
         var file = nlapiCreateFile(info.filename, info.nsfileext, body);
         file.setFolder(info.folderid);
+        if (datain.isonline){
+            file.setIsOnline('true');
+        }
         var r = JSON.stringify(nlapiSubmitFile(file));
         nlapiLogExecution('DEBUG', 'up!', r);
         return {message: 'Uploaded ' + info.filename + ' to file id ' + r, fileid: Number(r)};
