@@ -44,7 +44,7 @@ vinylfs.src('foo.js')
 		account : '123456' ,
 		realm : 'sandbox.netsuite.com' ,
 		role : 3 ,
-		rootPath : 'SuiteScripts/MyProject'
+		rootPath : '/SuiteScripts/MyProject'
 		script : 95 ,
 		deployment : 1
 	}))
