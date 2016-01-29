@@ -58,8 +58,7 @@ module.exports.upload = module.exports;
 
 module.exports.checkParams = checkParams;
 
-module.exports.download = (files, params) => {
-
+module.exports.download = (files, params, callback) => {
     params = checkParams(params);
 
     var toRequest = requestOpts(params);
@@ -68,7 +67,7 @@ module.exports.download = (files, params) => {
         files : files ,
         rootpath: params.rootPath
     };
-
+    var result = []
     var emitter = es.through(
 
         function write(data) {
@@ -79,7 +78,7 @@ module.exports.download = (files, params) => {
                 return;
             }
 
-            data.files = data.files || [];
+            result = data.files = data.files || [];
 
             data.files.forEach( file => {
                 var localPath = file.path.startsWith('/') ? 'cabinet_root' + file.path : file.path;
@@ -98,6 +97,11 @@ module.exports.download = (files, params) => {
 
         function end() {
             this.emit('end');
+            if (typeof callback === 'function') {
+              callback(result.map(function(file) {
+                return file.path
+              }))
+            }
         }
     );
 
