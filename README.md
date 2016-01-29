@@ -15,13 +15,13 @@ _PS: This is actually also a gulp plugin. A `gulp-nscabinet` wrapper module is a
 
 ## Input options
 
-The parameters may be stored in `~/.ns/nsconfig.json`, in environment variables, or passed directly.
+The parameters may be stored in config files, in environment variables, or passed directly.
 
 For environment variables, prefix the options with "NSCONF_" and write in uppercase.
 
 The following priority is taken for each parameter (using `_.extend`)
 
- 1. Direct code input
+ 1. Direct code input (options argument)
 
  2. `./nsconfig.json`, then `../nsconfig.json`, up to 3 levels.
 
@@ -35,7 +35,7 @@ The following priority is taken for each parameter (using `_.extend`)
 ```javascript
 
 var nscabinet = require('nscabinet') ,
-	vinylfs = require('vinyl-fs')
+	vinylfs = require('vinyl-fs') // or require('gulp')
 
 vinylfs.src('foo.js')
 	.pipe(nscabinet({
