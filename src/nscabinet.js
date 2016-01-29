@@ -2,9 +2,15 @@
 
 var request = require('request'),
     through = require('through2'),
-    checkParams = require('./parameters.js'),
     vinyl = require('vinyl'),
-    es = require('event-stream');
+    es = require('event-stream'),
+    nsconfig = require('nsconfig');
+
+var PARAMS_DEF = [
+    {name: 'rootPath', def: '/SuiteScripts'},
+    {name: 'script', required : true },
+    {name: 'deployment', def: 1}
+];
 
 module.exports = (params) => {
     params = checkParams(params);
@@ -54,9 +60,17 @@ module.exports = (params) => {
 
 };
 
+
 module.exports.upload = module.exports;
 
+
 module.exports.checkParams = checkParams;
+function checkParams (override, noThrow) {
+    var out = nsconfig(override, PARAMS_DEF, noThrow);
+    if (!out.rootPath.startsWith('/')) throw Error('rootPath must begin with /');
+    return out;
+}
+
 
 module.exports.download = (files,params) => {
 

@@ -3,8 +3,8 @@
   "version": "0.4.0",
   "description": "Upload and download files from netsuite.",
   "engines": {
-    "node": ">= 4.0.0",
-    "npm": ">=2.1.5"
+    "node": "4.x",
+    "npm": ">=2.x.x"
   },
   "main": "src/nscabinet.js",
   "bin": {
@@ -56,6 +56,7 @@
     "nsmockup": "^0.8.0",
     "q": "^1.4.1",
     "require-dir": "^0.3.0",
+    "rimraf": "^2.5.1",
     "should": "^7.1.0"
   }
 }

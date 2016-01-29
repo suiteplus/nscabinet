@@ -1,28 +1,15 @@
 'use strict';
 
 var fs = require('fs'),
-    nsmockup = require('nsmockup'),
-    nscabinet = require('../.');
+    //nsmockup = require('nsmockup'),
+    nscabinet = require('../.'),
+    rimraf = require('rimraf');
 
-var deleteFolderRecursive = function(path) {
-    if( fs.existsSync(path) ) {
-        fs.readdirSync(path).forEach(function(file,index){
-            var curPath = path + "/" + file;
-            if(fs.lstatSync(curPath).isDirectory()) { // recurse
-                deleteFolderRecursive(curPath);
-            } else { // delete file
-                fs.unlinkSync(curPath);
-            }
-        });
-        fs.rmdirSync(path);
-    }
-};
-
-describe('<Unit Test - NetSuite File Cabinet>', () => {
+describe('NetSuite File Cabinet', () => {
     var should = require('should'),
         vinyl = require('vinyl-fs');
 
-    beforeEach(function (done) {
+    beforeEach(function () {
         this.timeout(10000);
 
         ['.nscabinet'].forEach(function(dir) {
@@ -30,7 +17,7 @@ describe('<Unit Test - NetSuite File Cabinet>', () => {
                 fs.mkdirSync(dir);
             }
         });
-
+        /*
         nsmockup.init({server: true}, (err) => {
             if (err) return done(err);
             else {
@@ -48,6 +35,7 @@ describe('<Unit Test - NetSuite File Cabinet>', () => {
                 });
             }
         });
+        */
     });
 
     describe('Upload and download a file...', function() {
@@ -118,32 +106,62 @@ describe('<Unit Test - NetSuite File Cabinet>', () => {
             fs.writeFileSync('test/__input-files/file1.js', 'hello 1');
             fs.writeFileSync('test/__input-files/file2.js', 'hello 2');
 
-            vinyl.src('test/__input-files/*.js').pipe(nscabinet())
+            vinyl.src('test/__input-files/*.js')
+                .pipe(nscabinet())
                 .on('finish', () => {
                     nscabinet
                         .download('test/__input-files/*.js')
                         .pipe(vinyl.dest(outDir))
                         .on('finish', () => {
                             should(fs.existsSync(outDir + '/test/__input-files/file1.js')).be.true();
-                            should(fs.readFileSync(outDir + '/test/__input-files/file1.js').toString()).be.equal('hello 1');
-
-                            should(fs.existsSync(outDir + '/test/__input-files/file2.js')).be.true();
-                            should(fs.readFileSync(outDir + '/test/__input-files/file2.js').toString()).be.equal('hello 2');
+                            should(fs.readFileSync(outDir + '/test/__input-files/file1.js')
+                                .toString()).be.equal('hello 1');
+                            should(fs.existsSync(outDir + '/test/__input-files/file2.js'))
+                                .be.true();
+                            should(fs.readFileSync(outDir + '/test/__input-files/file2.js')
+                                .toString()).be.equal('hello 2');
 
                             done();
                         });
                 });
         });
+
+        
+        it('upload using a different cwd. download it back', function(done) {
+            this.timeout(20000);
+
+            fs.writeFileSync('test/__input-files/file3.js', 'hello 3');
+
+            vinyl.src('file3.js', { cwd : 'test/__input_files' })
+                .pipe(nscabinet())
+                .on('finish', () => {
+                    nscabinet.download('file3.js')
+                        .pipe(vinyl.dest(outDir))
+                        .on('finish', () => {
+                            should(fs.existsSync(outDir + '/file3.js')).be.true();
+                            should(fs.readFileSync(outDir + '/file3.js')
+                                .toString()).be.equal('hello 1');
+                            done();
+                        });
+                });
+        });
+
+
     });
 
-    afterEach(function (done) {
+    afterEach(function () {
+        /*
         nsmockup.destroy(function(err) {
             if (err) {
                 return done(err);
             } else {
-                deleteFolderRecursive('.nscabinet');
+                rimraf.sync('.nscabinet');
                 return done();
             }
         });
+        */
+       
+        rimraf.sync('.nscabinet');
+
     });
 });

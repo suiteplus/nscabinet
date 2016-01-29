@@ -1,17 +1,22 @@
-# nscabinet [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
+# nscabinet
+[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
+[![Dependency Status][david-image]][david-url] [![devDependency Status][david-image-dev]][david-url-dev]
 
 Upload/download files to a netsuite account, using the included _restlet_.
 
-_PS: This is actually also a gulp plugin. A `gulp-nscabinet` wrapper module is also available._
+_PS: This is actually also a gulp plugin._
 
 ## Required
 
  * node.js 4+
 
-## Install [![Dependency Status][david-image]][david-url] [![devDependency Status][david-image-dev]][david-url-dev]
+## Quick start
 ```bash
     npm install nscabinet
 ```
+  - Install the __nscabinet restlet__ bundle in your netsuite account (or manually create the script using the file in the repo)
+
+  - Create a `nsconfig.json` file in the root of you project with at least __email__ , __password__, __account__, __script__ number and __deployment__ number.
 
 ## Input options
 
@@ -21,13 +26,17 @@ For environment variables, prefix the options with "NSCONF_" and write in upperc
 
 The following priority is taken for each parameter (using `_.extend`)
 
- 1. Direct code input (options argument)
+ 1. Options argument `nscabinet(options)`
 
- 2. `./nsconfig.json`, then `../nsconfig.json`, up to 3 levels.
+ 2. `./nsconfig.json`, then `../nsconfig.json`, up to 5 levels.
 
  2. `~/.ns/nsconfig.json`
 
  3. Environment variables
+
+For instance, let's say you call `nscabinet({ account : '1234' })`. Even if no e-mail is supplied, we also look up in the sources listed above for it. You may set a `nsconfig.json` for the project without the password, setting the latter machine-wise using an environment variable.
+
+For more info see [nsconfig](https://github.com/suiteplus/nsconfig).
 
 
 ## nscabinet.upload
@@ -35,7 +44,9 @@ The following priority is taken for each parameter (using `_.extend`)
 ```javascript
 
 var nscabinet = require('nscabinet') ,
-	vinylfs = require('vinyl-fs') // or require('gulp')
+	vinylfs = require('vinyl-fs')
+//or require('gulp').
+//vinyl is the part of gulp which has .src() and .dst()
 
 vinylfs.src('foo.js')
 	.pipe(nscabinet({
@@ -44,14 +55,14 @@ vinylfs.src('foo.js')
 		account : '123456' ,
 		realm : 'sandbox.netsuite.com' ,
 		role : 3 ,
-		rootPath : 'SuiteScripts/MyProject'
+		rootPath : '/SuiteScripts/MyProject'
 		script : 95 ,
 		deployment : 1
 	}))
 
 ```
 
- * `realm` defaults to `system.netsuite.com`.
+ * `realm` defaults to `netsuite.com`.
 	
  * `role` defaults to the account's default role.
 	
@@ -70,7 +81,7 @@ nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
 
   * `files` file selector (one or many).
     
-    * `*` is accepted on the file part, which is replaced by `%` on the netsuite file search.
+    * `*` is accepted on the file part, which is replaced by `%` on the underlying netsuite file search.
     
     * Paths are also relative to `opts.rootPath`. If a file selector begins with `/`, files will be queried
       by absolute path in netsuite, but saved locally inside the `cabinet_root` folder.
