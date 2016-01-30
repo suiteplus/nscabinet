@@ -4,22 +4,22 @@ var request = require('request'),
     through = require('through2'),
     checkParams = require('./parameters.js'),
     vinyl = require('vinyl'),
-    es = require('event-stream');
+    es = require('event-stream'),
+    path = require('path');
 
 module.exports = (params) => {
     params = checkParams(params);
 
     return through.obj(function (chunk, enc, callback) {
-
         var that = this,
-            path = chunk.path.substr((checkParams.CONF_CWD||chunk.cwd).length + 1);
+            fullCwd = path.resolve(checkParams.CONF_CWD || chunk.cwd),
+            remotePath = chunk.path.substr(fullCwd.length+1);
 
-        console.log('Uploading ' + path + ' to ' + params.rootPath );
-
+        console.log('Uploading ' + remotePath + ' to ' + params.rootPath );
         var toRequest = requestOpts(params);
         toRequest.json = {
             action : 'upload',
-            filepath: path,
+            filepath: remotePath,
             content: chunk.contents.toString('base64'),
             rootpath: params.rootPath
         };
@@ -58,8 +58,7 @@ module.exports.upload = module.exports;
 
 module.exports.checkParams = checkParams;
 
-module.exports.download = (files,params) => {
-
+module.exports.download = (files, params, callback) => {
     params = checkParams(params);
 
     var toRequest = requestOpts(params);
@@ -68,7 +67,7 @@ module.exports.download = (files,params) => {
         files : files ,
         rootpath: params.rootPath
     };
-
+    var result = []
     var emitter = es.through(
 
         function write(data) {
@@ -79,10 +78,9 @@ module.exports.download = (files,params) => {
                 return;
             }
 
-            data.files = data.files || [];
+            result = data.files = data.files || [];
 
             data.files.forEach( file => {
-
                 var localPath = file.path.startsWith('/') ? 'cabinet_root' + file.path : file.path;
 
                 var vynFile = new vinyl({
@@ -99,6 +97,11 @@ module.exports.download = (files,params) => {
 
         function end() {
             this.emit('end');
+            if (typeof callback === 'function') {
+              callback(result.map(function(file) {
+                return file.path
+              }))
+            }
         }
     );
 
