@@ -3,8 +3,8 @@
 var request = require('request'),
     through = require('through2'),
     vinyl = require('vinyl'),
-    es = require('event-stream'),
-    nsconfig = require('nsconfig');
+    nsconfig = require('nsconfig'),
+    path = require('path');
 
 var PARAMS_DEF = [
     {name: 'rootPath', def: '/SuiteScripts'},
@@ -12,56 +12,89 @@ var PARAMS_DEF = [
     {name: 'deployment', def: 1}
 ];
 
-module.exports = (params) => {
+
+module.exports = upload;
+module.exports.upload = upload;
+function upload (params) {
     params = checkParams(params);
 
     return through.obj(function (chunk, enc, callback) {
-
         var that = this,
-            path = chunk.path.substr((checkParams.CONF_CWD||chunk.cwd).length + 1);
+            fullCwd = path.resolve(checkParams.CONF_CWD || chunk.cwd),
+            remotePath = chunk.path.substr(fullCwd.length+1);
 
-        console.log('Uploading ' + path + ' to ' + params.rootPath );
+        console.log('Uploading ' + remotePath + ' to ' + params.rootPath );
 
-        var toRequest = requestOpts(params);
+        var toRequest = _requestOpts(params);
         toRequest.json = {
             action : 'upload',
-            filepath: path,
+            filepath: remotePath,
             content: chunk.contents.toString('base64'),
             rootpath: params.rootPath
         };
 
         request( toRequest ).on('response', response => {
-
             chunk.nscabinetResponse = response;
             that.push(chunk);
-
-            var logger = es.through( function write(data){
-
-                if (data.message) console.log(data.message);
-                if (data.error) console.log(`${data.error.code} - ${data.error.message}`);
-                if (data.error && data.error.code == 'INVALID_LOGIN_CREDENTIALS') {
-                    console.log(`Email: ${params.email}`);
-                }
-
-                this.emit('end');
-
+            var logger = _responseLogger();
+            response.pipe(logger).on('finish', () => {
+                callback();
             });
-
-            response
-                .pipe(es.split())
-                .pipe(es.parse())
-                .pipe(logger);
-
-            callback();
-
         });
-
     });
+}
 
-};
+
+module.exports.download = download;
+function download (files,params) {
+    params = checkParams(params);
+    var toRequest = _requestOpts(params);
+    toRequest.json = {
+        action : 'download' ,
+        files : files ,
+        rootpath: params.rootPath
+    };
+    var buffer = ''; 
+    var emitter = through.obj(
+        function transform(data,enc,cb) {
+            buffer += data;
+            cb();
+        },
+        function flush(cb) {
+            var data = JSON.parse(buffer);
+            if (data.error) {
+                console.error(data.error.message);
+                this.emit('error',data.error);
+                return;
+            }
+            data.files = data.files || [];
+            data.files.forEach( file => {
+                var localPath = file.path.startsWith('/') ? 'cabinet_root' + file.path : file.path;
+                var vynFile = new vinyl({
+                    path : localPath ,
+                    contents : new Buffer(file.contents,'base64')
+                });
+                console.log(`Got file ${file.path}.`);
+                this.push(vynFile);
+            });
+            cb();
+
+        }
+    );
+    return request( toRequest ).pipe(emitter);
+}
 
 
-module.exports.upload = module.exports;
+module.exports.deleteFolder = deleteFolder;
+function deleteFolder (folders, params) {
+    if (!Array.isArray(folders)) folders = [folders];
+    var toRequest = _requestOpts(params);
+    toRequest.json = {
+        action : 'deleteFolder' ,
+        rootpath : params.rootPath ,
+        folders : folders
+    };
+}
 
 
 module.exports.checkParams = checkParams;
@@ -72,60 +105,7 @@ function checkParams (override, noThrow) {
 }
 
 
-module.exports.download = (files,params) => {
-
-    params = checkParams(params);
-
-    var toRequest = requestOpts(params);
-    toRequest.json = {
-        action : 'download' ,
-        files : files ,
-        rootpath: params.rootPath
-    };
-
-    var emitter = es.through(
-
-        function write(data) {
-
-            if (data.error) {
-                console.error(data.error.message);
-                this.emit('error',data.error);
-                return;
-            }
-
-            data.files = data.files || [];
-
-            data.files.forEach( file => {
-
-                var localPath = file.path.startsWith('/') ? 'cabinet_root' + file.path : file.path;
-
-                var vynFile = new vinyl({
-                    path : localPath ,
-                    contents : new Buffer(file.contents,'base64')
-                });
-
-                console.log(`Got file ${file.path}.`);
-
-                this.emit('data',vynFile);
-
-            });
-        } ,
-
-        function end() {
-            this.emit('end');
-        }
-    );
-
-    return request( toRequest )
-        .pipe(es.split())
-        .pipe(es.parse())
-        .pipe(emitter);
-
-};
-
-
-
-function requestOpts(params) {
+function _requestOpts (params) {
     var nlauthRolePortion = ( params.role ) ? `,nlauth_role=${params.role}` : '',
         server = process.env.NS_SERVER || `https://rest.${params.realm}/app/site/hosting/restlet.nl`;
 
@@ -140,4 +120,25 @@ function requestOpts(params) {
             authorization: `NLAuth nlauth_account=${params.account},nlauth_email=${params.email},nlauth_signature=${params.password}${nlauthRolePortion}`
         }
     };
+}
+
+
+function _responseLogger () {
+
+    var buffer = '';
+    return through( function transform(data,enc,cb){
+        buffer += data;
+        this.push(data);
+        cb();
+    }, function flush(cb){
+        try {
+            var data = JSON.parse(buffer);
+        } catch(e) {
+            throw Error('Unable to parse response: ' + e);
+        }
+        if (data.message) console.log(data.message);
+        if (data.error) console.log(`${data.error.code} - ${data.error.message}`);
+        cb();
+    });
+
 }

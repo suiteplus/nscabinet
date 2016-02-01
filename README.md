@@ -1,6 +1,4 @@
 # nscabinet
-[![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
-[![Dependency Status][david-image]][david-url] [![devDependency Status][david-image-dev]][david-url-dev]
 
 Upload/download files to a netsuite account, using the included _restlet_.
 
@@ -123,19 +121,3 @@ Uploading Views/view.html to /SuiteScripts
 **gulp/development.js** is for straightforward tasks: lint and unit tests.
 
 **gulp/test.js** is for more involved things.
-
-
-[travis-url]: https://travis-ci.org/suiteplus/nscabinet
-[travis-image]: https://img.shields.io/travis/suiteplus/nscabinet.svg
-
-[coveralls-url]: https://coveralls.io/r/suiteplus/nscabinet
-[coveralls-image]: http://img.shields.io/coveralls/suiteplus/nscabinet/master.svg
-
-[david-url]: https://david-dm.org/suiteplus/nscabinet
-[david-image]: https://david-dm.org/suiteplus/nscabinet.svg
-
-[david-url-dev]: https://david-dm.org/suiteplus/nscabinet#info=devDependencies
-[david-image-dev]: https://david-dm.org/suiteplus/nscabinet/dev-status.svg
-
-[npm-url]: https://npmjs.org/package/nscabinet
-[npm-image]: http://img.shields.io/npm/v/nscabinet.svg

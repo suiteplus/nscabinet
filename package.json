@@ -35,7 +35,6 @@
   },
   "homepage": "https://github.com/suiteplus/nscabinet#readme",
   "dependencies": {
-    "event-stream": "^3.3.2",
     "nsconfig": "^0.3.0",
     "request": "^2.64.0",
     "through2": "^2.0.0",
@@ -45,6 +44,7 @@
   },
   "devDependencies": {
     "coveralls": "^2.11.4",
+    "del": "^2.2.0",
     "eslint": "^1.5.1",
     "eslint-plugin-mocha": "^1.0.0",
     "gulp": "^3.9.0",
@@ -56,7 +56,6 @@
     "nsmockup": "^0.8.0",
     "q": "^1.4.1",
     "require-dir": "^0.3.0",
-    "rimraf": "^2.5.1",
     "should": "^7.1.0"
   }
 }
