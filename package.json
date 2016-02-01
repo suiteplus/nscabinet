@@ -1,9 +1,9 @@
 {
   "name": "nscabinet",
-  "version": "0.4.0",
+  "version": "0.5.0-pre",
   "description": "Upload and download files from netsuite.",
   "engines": {
-    "node": "4.x",
+    "node": ">=4.x",
     "npm": ">=2.x.x"
   },
   "main": "src/nscabinet.js",
@@ -20,13 +20,8 @@
   },
   "keywords": [
     "netsuite",
-    "suitecript",
-    "suitelet",
-    "restlet",
-    "cabinet",
-    "suiteplus",
-    "suite",
-    "s+"
+    "suitescript",
+    "cabinet"
   ],
   "author": "Suiteplus",
   "license": "MIT",

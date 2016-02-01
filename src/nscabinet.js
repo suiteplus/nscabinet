@@ -9,7 +9,8 @@ var request = require('request'),
 var PARAMS_DEF = [
     {name: 'rootPath', def: '/SuiteScripts'},
     {name: 'script', required : true },
-    {name: 'deployment', def: 1}
+    {name: 'deployment', def: 1},
+    {name: 'isCLI', def : false }
 ];
 
 
@@ -20,7 +21,7 @@ function upload (params) {
 
     return through.obj(function (chunk, enc, callback) {
         var that = this,
-            fullCwd = path.resolve(checkParams.CONF_CWD || chunk.cwd),
+            fullCwd = path.resolve((params.isCLI) ? nsconfig.CONF_CWD : chunk.cwd),
             remotePath = chunk.path.substr(fullCwd.length+1);
 
         console.log('Uploading ' + remotePath + ' to ' + params.rootPath );
@@ -78,7 +79,6 @@ function download (files,params) {
                 this.push(vynFile);
             });
             cb();
-
         }
     );
     return request( toRequest ).pipe(emitter);
