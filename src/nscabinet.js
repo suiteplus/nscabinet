@@ -10,7 +10,8 @@ var PARAMS_DEF = [
     {name: 'rootPath', def: '/SuiteScripts'},
     {name: 'script', required : true },
     {name: 'deployment', def: 1},
-    {name: 'isCLI', def : false }
+    {name: 'isCLI', def : false },
+    {name: 'isonline', def : false}
 ];
 
 
@@ -36,7 +37,8 @@ function upload (params) {
             action : 'upload',
             filepath: remotePath,
             content: chunk.contents.toString('base64'),
-            rootpath: params.rootPath
+            rootpath: params.rootPath ,
+            isonline : params.isonline
         };
 
         request( toRequest ).on('response', response => {
