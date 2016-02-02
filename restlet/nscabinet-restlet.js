@@ -27,12 +27,14 @@ var post = function (datain) {
 };
 
 var upload = function (datain) {
-    var body = nlapiDecrypt(datain.content, 'base64');
 
     if (!datain.filepath) throw nlapiCreateError('PARAM_ERR', 'No file path specified', true);
     if (!datain.rootpath) throw nlapiCreateError('PARAM_ERR', 'No destination root path specified', true);
 
     var info = pathInfo(datain.filepath, datain.rootpath, true);
+    var body = datain.content;
+    if (~NON_BINARY_FILETYPES.indexOf(info.nsfileext))
+        body = nlapiDecrypt(datain.content, 'base64');
 
     if (info.filename) {
         var file = nlapiCreateFile(info.filename, info.nsfileext, body);
