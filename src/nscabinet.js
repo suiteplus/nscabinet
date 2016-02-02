@@ -20,6 +20,11 @@ function upload (params) {
     params = checkParams(params);
 
     return through.obj(function (chunk, enc, callback) {
+        if (chunk.isDirectory()) {
+            this.push(chunk);
+            return callback();
+        }
+
         var that = this,
             fullCwd = path.resolve((params.isCLI) ? nsconfig.CONF_CWD : chunk.cwd),
             remotePath = chunk.path.substr(fullCwd.length+1);
