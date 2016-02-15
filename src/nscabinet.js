@@ -4,7 +4,8 @@ var request = require('request'),
     through = require('through2'),
     vinyl = require('vinyl'),
     nsconfig = require('nsconfig'),
-    path = require('path');
+    path = require('path'),
+    q = require('q');
 
 var PARAMS_DEF = [
     {name: 'rootPath', def: '/SuiteScripts'},
@@ -91,9 +92,10 @@ function download (files,params) {
     return request( toRequest ).pipe(emitter);
 }
 
-
+/* STUB */
 module.exports.deleteFolder = deleteFolder;
 function deleteFolder (folders, params) {
+    params = checkParams(params);
     if (!Array.isArray(folders)) folders = [folders];
     var toRequest = _requestOpts(params);
     toRequest.json = {
@@ -109,6 +111,25 @@ function checkParams (override, noThrow) {
     var out = nsconfig(override, PARAMS_DEF, noThrow);
     if (!out.rootPath.startsWith('/')) throw Error('rootPath must begin with /');
     return out;
+}
+
+/**
+ * this function does not work with streams/gulp,
+ * instead it simply gets string and returns promise.
+ */
+module.exports.url = url;
+function url(path, params) {
+    params = checkParams(params);
+    var toRequest = _requestOpts(params);
+    toRequest.json = {
+        action :  'url' ,
+        path : params.rootPath.substr(1) + '/' + path
+    };
+    var deferred = q.defer();
+    request( toRequest , (err,resp,body) => {
+        deferred.resolve(`https://system.${params.realm}${body.url}`);
+    });
+    return deferred.promise;
 }
 
 

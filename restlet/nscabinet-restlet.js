@@ -21,6 +21,8 @@ var post = function (datain) {
         return download(datain);
     case 'upload':
         return upload(datain);
+    case 'url':
+        return url(datain);
     default:
         return {message: 'invalid action'};
     }
@@ -105,6 +107,14 @@ var download = function (datain) {
 
     return {files: outfiles};
 };
+
+
+function url(inp) {
+    var file = nlapiLoadFile(inp.path);
+    return {
+        url : file.getURL()
+    };
+}
 
 
 var NON_BINARY_FILETYPES = [

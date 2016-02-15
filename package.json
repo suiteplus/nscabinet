@@ -31,6 +31,7 @@
   "homepage": "https://github.com/suiteplus/nscabinet#readme",
   "dependencies": {
     "nsconfig": "^0.3.0",
+    "q": "^1.4.1",
     "request": "^2.64.0",
     "through2": "^2.0.0",
     "vinyl": "^1.0.0",

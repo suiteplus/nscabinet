@@ -16,6 +16,13 @@ _PS: This is actually also a gulp plugin._
 
   - Create a `nsconfig.json` file in the root of you project with at least __email__ , __password__, __account__, __script__ number and __deployment__ number.
 
+  - Use it with gulp or with the CLI (see CLI section below)
+  
+```javascript
+var nscabinet = require('nscabinet');
+gulp.src('myProject/dist/**/*.js').pipe(nscabinet());
+```
+
 ## Input options
 
 The parameters may be stored in config files, in environment variables, or passed directly.
@@ -42,11 +49,9 @@ For more info see [nsconfig](https://github.com/suiteplus/nsconfig).
 ```javascript
 
 var nscabinet = require('nscabinet') ,
-	vinylfs = require('vinyl-fs')
-//or require('gulp').
-//vinyl is the part of gulp which has .src() and .dst()
+	gulp = require('gulp') //or just vinyl-fs
 
-vinylfs.src('foo.js')
+gulp.src('foo.js')
 	.pipe(nscabinet({
 		email : 'foo@bar.baz.com' ,
 		password : '123456' ,
@@ -67,11 +72,13 @@ vinylfs.src('foo.js')
  * `deployment` defaults to 1.
 	
  * `rootPath` defaults to `/SuiteScripts`. Must begin with `/`.
+ 
+ * `isonline` (boolean) lets you set the uploaded files to be avaliable
+   without login.
 
 ## nscabinet.download( files , [opts] )
 
 ```javascript
-
 nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
 	.pipe(vinylfs.dest('local'))
 
@@ -86,6 +93,21 @@ nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
   
   * `opts` The same options as seen in upload.
 
+
+## nscabinet.url ( file : string , [opts] ) : Promise[string]
+
+Get the url (internal or external) of a cabinet file. Returns a promise. 
+Useful for email campaign stuff.
+
+Options: receives the ones which make sense here (ex: rootPath, realm, etc...) in the
+same fashion.
+
+```javascript
+nscabinet.url('emails/img/header.jpg').then( url => {
+    cheerio_img.attr(src,url);
+    return cheerio_doc.html();
+});
+```
 
 ## CLI
 
