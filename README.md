@@ -20,10 +20,10 @@ _PS: This is actually also a gulp plugin._
   
 ```javascript
 var nscabinet = require('nscabinet');
-gulp.src('myProject/dist/**/*.js').pipe(nscabinet());
+gulp.src('myProject/dist/**/*.js').pipe(nscabinet({ rootPath : '/Templates' }));
 ```
 
-## Input options
+## Accepted input ways
 
 The parameters may be stored in config files, in environment variables, or passed directly.
 
@@ -43,6 +43,24 @@ For instance, let's say you call `nscabinet({ account : '1234' })`. Even if no e
 
 For more info see [nsconfig](https://github.com/suiteplus/nsconfig).
 
+## Common parameters
+
+The following parameters are common through most of the methods:
+
+__Connection__
+
+ * `realm` defaults to `netsuite.com`.
+
+ * `role` defaults to the account's default role.
+
+ * `deployment` defaults to 1.
+
+__Path__
+
+ * `rootPath` sets the root path on the server. Defaults to `/SuiteScripts`. Must begin with `/`.
+
+Example: Upload file with path `img/image.jpg` with rootPath `/Templates` will "upsert" the file
+onto '/Templates/img/image.jpg'.
 
 ## nscabinet.upload
 
@@ -65,14 +83,6 @@ gulp.src('foo.js')
 
 ```
 
- * `realm` defaults to `netsuite.com`.
-	
- * `role` defaults to the account's default role.
-	
- * `deployment` defaults to 1.
-	
- * `rootPath` defaults to `/SuiteScripts`. Must begin with `/`.
- 
  * `isonline` (boolean) lets you set the uploaded files to be avaliable
    without login.
 
@@ -86,12 +96,12 @@ nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
 
   * `files` file selector (one or many).
     
-    * `*` is accepted on the file part, which is replaced by `%` on the underlying netsuite file search.
+    * `*` is accepted on the file part. The restlet then runs a file search in which `*` is replaced with `%`.
     
     * Paths are also relative to `opts.rootPath`. If a file selector begins with `/`, files will be queried
       by absolute path in netsuite, but saved locally inside the `cabinet_root` folder.
   
-  * `opts` The same options as seen in upload.
+  * `opts` Common options.
 
 
 ## nscabinet.url ( file : string , [opts] ) : Promise[string]

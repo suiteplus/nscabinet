@@ -55,6 +55,7 @@ var download = function (datain) {
         datain.files = [datain.files];
     }
 
+    var errors = [];
     function getFileData(file, info) {
         var contents = file.getValue();
 
@@ -100,12 +101,19 @@ var download = function (datain) {
             outfiles = outfiles.concat(addFiles);
             //case 2: direct load
         } else {
-            var file = nlapiLoadFile(info.pathabsolute.substr(1));
-            outfiles = outfiles.concat([getFileData(file, info)]);
+            try {
+                var file = nlapiLoadFile(info.pathabsolute.substr(1));
+                outfiles = outfiles.concat([getFileData(file, info)]);
+            } catch (e) {
+                errors.push(e);
+            }
         }
     });
 
-    return {files: outfiles};
+    var out = {files: outfiles};
+    if (errors.length) out.error = errors;
+    return out;
+
 };
 
 

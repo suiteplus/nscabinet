@@ -165,5 +165,22 @@ describe('nscabinet:', function() {
     });
     */
 
-    
+
+    it('try to download 2 files, the 1st does not exist. Emit warning but still download the second', function(done){
+        var content = randContent();
+        fs.writeFileSync('test/_input/cnt1.txt', content);
+        vinyl.src(['test/_input/cnt1.txt']).pipe(nscabinet()).on('finish', () => {
+            nscabinet.download(['test/_input/cnt2.txt','test/_input/cnt1.txt'])
+                .pipe(vinyl.dest('test/_output'))
+                .on('finish' , () => {
+                    should(fs.existsSync('test/_output/test/_input/cnt1.txt')).be.true();
+                    should(fs.readFileSync('test/_output/test/_input/cnt1.txt').toString())
+                        .be.equal(content);
+                    done()
+                });
+        });
+
+    });
+
+
 });

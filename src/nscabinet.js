@@ -4,8 +4,7 @@ var request = require('request'),
     through = require('through2'),
     vinyl = require('vinyl'),
     nsconfig = require('nsconfig'),
-    path = require('path'),
-    q = require('q');
+    path = require('path');
 
 var PARAMS_DEF = [
     {name: 'rootPath', def: '/SuiteScripts'},
@@ -55,7 +54,7 @@ function upload (params) {
 
 
 module.exports.download = download;
-function download (files,params) {
+function download (files,params,info) {
     params = checkParams(params);
     var toRequest = _requestOpts(params);
     toRequest.json = {
@@ -72,9 +71,19 @@ function download (files,params) {
         function flush(cb) {
             var data = JSON.parse(buffer);
             if (data.error) {
-                console.error(data.error.message);
-                this.emit('error',data.error);
-                return;
+                data.error = data.error.map( err => {
+                    try {
+                        return JSON.parse(err)
+                    }catch(e) {
+                        //keep as it came
+                        return err;
+                    }
+                } );
+                data.error.forEach( e => console.error('RESTLET ERROR: ' + (e.details || e.message || e)) );
+                info = info || {};
+                info.errors = info.errors || [];
+                info.errors = info.errors.concat(data.error);
+                //this.emit('error',data.error);
             }
             data.files = data.files || [];
             data.files.forEach( file => {
@@ -93,6 +102,7 @@ function download (files,params) {
 }
 
 /* STUB */
+/*
 module.exports.deleteFolder = deleteFolder;
 function deleteFolder (folders, params) {
     params = checkParams(params);
@@ -104,6 +114,7 @@ function deleteFolder (folders, params) {
         folders : folders
     };
 }
+*/
 
 
 module.exports.checkParams = checkParams;
@@ -125,11 +136,12 @@ function url(path, params) {
         action :  'url' ,
         path : params.rootPath.substr(1) + '/' + path
     };
-    var deferred = q.defer();
-    request( toRequest , (err,resp,body) => {
-        deferred.resolve(`https://system.${params.realm}${body.url}`);
+    return new Promise((resolve,reject) => {
+        request( toRequest , (err,resp,body) => {
+            if (err) return reject(err);
+            resolve(`https://system.${params.realm}${body.url}`);
+        });
     });
-    return deferred.promise;
 }
 
 
