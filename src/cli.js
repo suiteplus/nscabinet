@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+/* eslint-env node */
+/* eslint-env es6 */
+
 var yarr = require('yargs')
     .usage('Usage: nscabinet <command> <file> [options]')
     .command('u','Upload.')

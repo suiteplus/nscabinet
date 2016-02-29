@@ -1,6 +1,8 @@
 /*eslint-env mocha*/
 'use strict';
 
+process.env.NODE_ENV = 'nsmockup';
+
 var fs = require('fs'),
     nscabinet = require('../.'),
     should = require('should'),
@@ -33,28 +35,6 @@ describe('nscabinet:', function() {
     });
 
 
-    //it('force auth error', function (done) {
-    //    this.timeout(10000);
-    //    vinyl.src('test/_input-files/uploadme.txt')
-    //        .pipe(nscabinet({email: 'anyemail'}))
-    //        .pipe(through.obj(function (chunk, enc, callback) {
-    //            var that = this;
-    //            var concat;
-    //
-    //            chunk.nscabinetResponse
-    //                .pipe(jsonStream.parse())
-    //                .on('data', json => {
-    //                    concat = json;
-    //                }).on('end', () => {
-    //                    should(concat).have.property('error').have.property('code', 'INVALID_LOGIN_CREDENTIALS');
-    //                    that.push(null);
-    //                    callback();
-    //                    done();
-    //                });
-    //        }));
-    //});
-
-
     var content1 = randContent();
     it('upload it!', function (done) {
         fs.writeFileSync('test/_input/test1.txt',content1);
@@ -77,7 +57,7 @@ describe('nscabinet:', function() {
             });
     });
 
-    
+
     it('upload two files. download them using a wildcard', function (done) {
         var content2 = randContent();
         var content3 = randContent();
@@ -102,7 +82,7 @@ describe('nscabinet:', function() {
             });
     });
 
-    
+
     it('upload using a different cwd. download it back', function(done) {
         var content4 = randContent();
         fs.writeFileSync('test/_input/test4.js', content4);
@@ -144,28 +124,6 @@ describe('nscabinet:', function() {
     });
 
 
-    //before running this
-    //install this updated copy of nscabinet globally using, for instance, npm i -g .
-    /*
-    it('upload from sub path using CLI. download it back', function(done) {
-        var content = randContent();
-        fs.writeFileSync('test/_input/test5.js', content);
-
-        var cp = require('child_process');
-        var out = cp.execSync('nscabinet u test5.js' , { cwd : 'test/_input' } );
-        console.log(String(out));
-        nscabinet.download('test5.js')
-            .pipe(vinyl.dest('test/_output'))
-            .on('finish', () => {
-                should(fs.existsSync('test/_output/test/_input/test5.js')).be.true();
-                should(fs.readFileSync('test/_output/test/_input/test5.js')
-                    .toString()).be.equal(content);
-                done();
-            });
-    });
-    */
-
-
     it('try to download 2 files, the 1st does not exist. Emit warning but still download the second', function(done){
         var content = randContent();
         fs.writeFileSync('test/_input/cnt1.txt', content);
@@ -182,5 +140,21 @@ describe('nscabinet:', function() {
 
     });
 
+
+    it('Recursively search for files', done => {
+        fs.mkdirSync('test/_input/recursive');
+        fs.writeFileSync('test/_input/recursive/rec1.html', randContent());
+        fs.mkdirSync('test/_input/recursive/inner');
+        fs.writeFileSync('test/_input/recursive/inner/rec2.txt', randContent());
+        vinyl.src('test/_input/**/*.*').pipe(nscabinet.upload()).on('finish', () => {
+            nscabinet.download('test/_input/recursive/**/*')
+                .pipe(vinyl.dest('test/_output'))
+                .on('finish' , () => {
+                    should(fs.existsSync('test/_output/test/_input/recursive/rec1.html')).be.true();
+                    should(fs.existsSync('test/_output/test/_input/recursive/inner/rec2.txt')).be.true();
+                    done();
+                });
+        })
+    })
 
 });

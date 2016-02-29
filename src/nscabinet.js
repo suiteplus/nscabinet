@@ -1,3 +1,5 @@
+/* eslint-env es6,node */
+
 'use strict';
 
 var request = require('request'),
@@ -73,7 +75,7 @@ function download (files,params,info) {
             if (data.error) {
                 data.error = data.error.map( err => {
                     try {
-                        return JSON.parse(err)
+                        return JSON.parse(err);
                     }catch(e) {
                         //keep as it came
                         return err;
@@ -148,6 +150,7 @@ function url(path, params) {
 function _requestOpts (params) {
     var nlauthRolePortion = ( params.role ) ? `,nlauth_role=${params.role}` : '',
         server = process.env.NS_SERVER || `https://rest.${params.realm}/app/site/hosting/restlet.nl`;
+    //NS_SERVER = testing + nsmockup
 
     return {
         url: server,

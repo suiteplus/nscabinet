@@ -1,6 +1,6 @@
 {
   "name": "nscabinet",
-  "version": "0.5.0-pre",
+  "version": "0.5.0",
   "description": "Upload and download files from netsuite.",
   "engines": {
     "node": ">=4.x",
@@ -9,10 +9,6 @@
   "main": "src/nscabinet.js",
   "bin": {
     "nscabinet": "./src/cli.js"
-  },
-  "scripts": {
-    "test": "gulp test",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
   },
   "repository": {
     "type": "git",

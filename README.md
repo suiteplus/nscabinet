@@ -12,20 +12,25 @@ _PS: This is actually also a gulp plugin._
 ```bash
     npm install nscabinet
 ```
-  - Install the __nscabinet restlet__ bundle in your netsuite account (or manually create the script using the file in the repo)
+  - Install the __nscabinet restlet__ bundle in your netsuite account (or manually create the script using the file in the repo) *
 
   - Create a `nsconfig.json` file in the root of you project with at least __email__ , __password__, __account__, __script__ number and __deployment__ number.
 
   - Use it with gulp or with the CLI (see CLI section below)
+    
   
 ```javascript
 var nscabinet = require('nscabinet');
 gulp.src('myProject/dist/**/*.js').pipe(nscabinet({ rootPath : '/Templates' }));
 ```
+_(*) if installing from the bundle, the minor version must match your current version of nscabinet_
+
+---
 
 ## Accepted input ways
 
-The parameters may be stored in config files, in environment variables, or passed directly.
+The parameters may be stored in config files, in environment variables,
+or passed directly as object.
 
 For environment variables, prefix the options with "NSCONF_" and write in uppercase.
 
@@ -41,7 +46,6 @@ The following priority is taken for each parameter (using `_.extend`)
 
 For instance, let's say you call `nscabinet({ account : '1234' })`. Even if no e-mail is supplied, we also look up in the sources listed above for it. You may set a `nsconfig.json` for the project without the password, setting the latter machine-wise using an environment variable.
 
-For more info see [nsconfig](https://github.com/suiteplus/nsconfig).
 
 ## Common parameters
 
@@ -53,13 +57,21 @@ __Connection__
 
  * `role` defaults to the account's default role.
 
+ * `account`
+
+ * `email`
+
+ * `password`
+
+ * `script`
+
  * `deployment` defaults to 1.
 
 __Path__
 
  * `rootPath` sets the root path on the server. Defaults to `/SuiteScripts`. Must begin with `/`.
 
-Example: Upload file with path `img/image.jpg` with rootPath `/Templates` will "upsert" the file
+Example: Upload file with path `img/image.jpg` to rootPath `/Templates` will "upsert" the file
 onto '/Templates/img/image.jpg'.
 
 ## nscabinet.upload
@@ -96,10 +108,17 @@ nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
 
   * `files` file selector (one or many).
     
-    * `*` is accepted on the file part. The restlet then runs a file search in which `*` is replaced with `%`.
+    * `*` is accepted on the file part. The restlet then runs a file search by name
+      in which `*` is replaced with `%`.
     
     * Paths are also relative to `opts.rootPath`. If a file selector begins with `/`, files will be queried
       by absolute path in netsuite, but saved locally inside the `cabinet_root` folder.
+      
+    * If a path has `/**/`, a recursive search will be done. This can be used to search
+      just by file name, regardless of path.
+      
+    * (PS: While the syntax is similar, don't expect full glob funcionality. It's not a glob!)
+      
   
   * `opts` Common options.
 
@@ -132,7 +151,7 @@ $ nscabinet d "remote.txt" -p "/Downloads"
 $ nscabinet d "remote.txt"
 ```
 
-Takes in the same arguments (lowercased).
+Takes in the same arguments (always lowercased).
 
 Encase path parameters in string quotes (avoids bash expansion).
 
@@ -148,8 +167,15 @@ $ Views nscabinet u view.html
 Uploading Views/view.html to /SuiteScripts
 ```
 
-## Gulp tasks
+## Contributing
 
-**gulp/development.js** is for straightforward tasks: lint and unit tests.
+ - If you add new funcionality, also add a new test!
+ 
+At the time tests are ran locally. To set up the tests:
 
-**gulp/test.js** is for more involved things.
+ - Install the restlet in an available account;
+ 
+ - Set up nsconfig.json, pointing to that account; Don't forget to set
+   a rootPath to where the tests will play around and create its lots of files;
+ 
+ - Run 'gulp'
