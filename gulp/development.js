@@ -16,7 +16,7 @@ gulp.task('dev:eslint', function () {
 });
 
 gulp.task('dev:mocha', () => {
-    gulp.src('test/*-test.js')
+    return gulp.src('test/*-test.js')
         .pipe(plugins.plumber())
         .pipe(plugins.mocha());
 });
