@@ -1,12 +1,14 @@
-# nscabinet
+# nscabinet [![NPM version][npm-image]][npm-url]
 
 Upload/download files to a netsuite account, using the included _restlet_.
 
 _PS: This is actually also a gulp plugin._
 
-## Required
+## Required [![Dependency Status][david-image]][david-url] [![devDependency Status][david-image-dev]][david-url-dev]
 
  * node.js 4+
+ 
+ 
 
 ## Quick start
 ```bash
@@ -179,3 +181,14 @@ At the time tests are ran locally. To set up the tests:
    a rootPath to where the tests will play around and create its lots of files;
  
  - Run 'gulp'
+ 
+ 
+ 
+ [npm-url]: https://npmjs.org/package/nscabinet
+[npm-image]: http://img.shields.io/npm/v/nscabinet.svg
+
+[david-url]: https://david-dm.org/suiteplus/nscabinet
+[david-image]: https://david-dm.org/suiteplus/nscabinet.svg
+
+[david-url-dev]: https://david-dm.org/suiteplus/nscabinet#info=devDependencies
+[david-image-dev]: https://david-dm.org/suiteplus/nscabinet/dev-status.svg
