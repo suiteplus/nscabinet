@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+/* eslint-env node */
+/* eslint-env es6 */
+
 var yarr = require('yargs')
     .usage('Usage: nscabinet <command> <file> [options]')
     .command('u','Upload.')
@@ -24,7 +27,9 @@ var cabinet = require('./nscabinet.js'),
 var action = yarr._[0],
     file = yarr._[1];
 
-var opts = {};
+var opts = {
+    isCLI : true
+};
 
 for (var it in yarr) {
     if (yarr[it] !== undefined) opts[it] = yarr[it];

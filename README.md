@@ -1,43 +1,87 @@
-# nscabinet [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Coveralls Status][coveralls-image]][coveralls-url]
+# nscabinet
 
 Upload/download files to a netsuite account, using the included _restlet_.
 
-_PS: This is actually a gulp plugin._
+_PS: This is actually also a gulp plugin._
 
 ## Required
 
  * node.js 4+
 
-## Install [![Dependency Status][david-image]][david-url] [![devDependency Status][david-image-dev]][david-url-dev]
+## Quick start
 ```bash
     npm install nscabinet
 ```
+  - Install the __nscabinet restlet__ bundle in your netsuite account (or manually create the script using the file in the repo) *
 
-## Input options
+  - Create a `nsconfig.json` file in the root of you project with at least __email__ , __password__, __account__, __script__ number and __deployment__ number.
 
-The parameters may be stored in config files, in environment variables, or passed directly.
+  - Use it with gulp or with the CLI (see CLI section below)
+    
+  
+```javascript
+var nscabinet = require('nscabinet');
+gulp.src('myProject/dist/**/*.js').pipe(nscabinet({ rootPath : '/Templates' }));
+```
+_(*) if installing from the bundle, the minor version must match your current version of nscabinet_
+
+---
+
+## Accepted input ways
+
+The parameters may be stored in config files, in environment variables,
+or passed directly as object.
 
 For environment variables, prefix the options with "NSCONF_" and write in uppercase.
 
 The following priority is taken for each parameter (using `_.extend`)
 
- 1. Direct code input (options argument)
+ 1. Options argument `nscabinet(options)`
 
- 2. `./nsconfig.json`, then `../nsconfig.json`, up to 3 levels.
+ 2. `./nsconfig.json`, then `../nsconfig.json`, up to 5 levels.
 
  2. `~/.ns/nsconfig.json`
 
  3. Environment variables
 
+For instance, let's say you call `nscabinet({ account : '1234' })`. Even if no e-mail is supplied, we also look up in the sources listed above for it. You may set a `nsconfig.json` for the project without the password, setting the latter machine-wise using an environment variable.
+
+
+## Common parameters
+
+The following parameters are common through most of the methods:
+
+__Connection__
+
+ * `realm` defaults to `netsuite.com`.
+
+ * `role` defaults to the account's default role.
+
+ * `account`
+
+ * `email`
+
+ * `password`
+
+ * `script`
+
+ * `deployment` defaults to 1.
+
+__Path__
+
+ * `rootPath` sets the root path on the server. Defaults to `/SuiteScripts`. Must begin with `/`.
+
+Example: Upload file with path `img/image.jpg` to rootPath `/Templates` will "upsert" the file
+onto '/Templates/img/image.jpg'.
 
 ## nscabinet.upload
 
 ```javascript
 
 var nscabinet = require('nscabinet') ,
-	vinylfs = require('vinyl-fs') // or require('gulp')
+	gulp = require('gulp') //or just vinyl-fs
 
-vinylfs.src('foo.js')
+gulp.src('foo.js')
 	.pipe(nscabinet({
 		email : 'foo@bar.baz.com' ,
 		password : '123456' ,
@@ -51,18 +95,12 @@ vinylfs.src('foo.js')
 
 ```
 
- * `realm` defaults to `system.netsuite.com`.
-	
- * `role` defaults to the account's default role.
-	
- * `deployment` defaults to 1.
-	
- * `rootPath` defaults to `/SuiteScripts`. Must begin with `/`.
+ * `isonline` (boolean) lets you set the uploaded files to be avaliable
+   without login.
 
 ## nscabinet.download( files , [opts] )
 
 ```javascript
-
 nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
 	.pipe(vinylfs.dest('local'))
 
@@ -70,13 +108,35 @@ nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
 
   * `files` file selector (one or many).
     
-    * `*` is accepted on the file part, which is replaced by `%` on the netsuite file search.
+    * `*` is accepted on the file part. The restlet then runs a file search by name
+      in which `*` is replaced with `%`.
     
     * Paths are also relative to `opts.rootPath`. If a file selector begins with `/`, files will be queried
       by absolute path in netsuite, but saved locally inside the `cabinet_root` folder.
+      
+    * If a path has `/**/`, a recursive search will be done. This can be used to search
+      just by file name, regardless of path.
+      
+    * (PS: While the syntax is similar, don't expect full glob funcionality. It's not a glob!)
+      
   
-  * `opts` The same options as seen in upload.
+  * `opts` Common options.
 
+
+## nscabinet.url ( file : string , [opts] ) : Promise[string]
+
+Get the url (internal or external) of a cabinet file. Returns a promise. 
+Useful for email campaign stuff.
+
+Options: receives the ones which make sense here (ex: rootPath, realm, etc...) in the
+same fashion.
+
+```javascript
+nscabinet.url('emails/img/header.jpg').then( url => {
+    cheerio_img.attr(src,url);
+    return cheerio_doc.html();
+});
+```
 
 ## CLI
 
@@ -91,7 +151,7 @@ $ nscabinet d "remote.txt" -p "/Downloads"
 $ nscabinet d "remote.txt"
 ```
 
-Takes in the same arguments (lowercased).
+Takes in the same arguments (always lowercased).
 
 Encase path parameters in string quotes (avoids bash expansion).
 
@@ -107,24 +167,15 @@ $ Views nscabinet u view.html
 Uploading Views/view.html to /SuiteScripts
 ```
 
-## Gulp tasks
+## Contributing
 
-**gulp/development.js** is for straightforward tasks: lint and unit tests.
+ - If you add new funcionality, also add a new test!
+ 
+At the time tests are ran locally. To set up the tests:
 
-**gulp/test.js** is for more involved things.
-
-
-[travis-url]: https://travis-ci.org/suiteplus/nscabinet
-[travis-image]: https://img.shields.io/travis/suiteplus/nscabinet.svg
-
-[coveralls-url]: https://coveralls.io/r/suiteplus/nscabinet
-[coveralls-image]: http://img.shields.io/coveralls/suiteplus/nscabinet/master.svg
-
-[david-url]: https://david-dm.org/suiteplus/nscabinet
-[david-image]: https://david-dm.org/suiteplus/nscabinet.svg
-
-[david-url-dev]: https://david-dm.org/suiteplus/nscabinet#info=devDependencies
-[david-image-dev]: https://david-dm.org/suiteplus/nscabinet/dev-status.svg
-
-[npm-url]: https://npmjs.org/package/nscabinet
-[npm-image]: http://img.shields.io/npm/v/nscabinet.svg
+ - Install the restlet in an available account;
+ 
+ - Set up nsconfig.json, pointing to that account; Don't forget to set
+   a rootPath to where the tests will play around and create its lots of files;
+ 
+ - Run 'gulp'
