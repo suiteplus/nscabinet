@@ -19,6 +19,7 @@ var yarr = require('yargs')
     .describe('role')
     .describe('script','Script id.')
     .describe('deployment','Deployment id.')
+    .describe('flatten')
     .argv;
 
 var cabinet = require('./nscabinet.js'),

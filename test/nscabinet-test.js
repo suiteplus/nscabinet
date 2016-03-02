@@ -157,4 +157,21 @@ describe('nscabinet:', function() {
         })
     })
 
+
+    it('Flatten.' , done => {
+        fs.mkdirSync('test/_input/flatten');
+        fs.writeFileSync('test/_input/flatten/flatten.txt', randContent());
+        vinyl.src('test/_input/flatten/*.*')
+            .pipe(nscabinet.upload({
+                flatten : true
+            }))
+            .on('finish' , () => {
+                nscabinet.download('flatten.txt').pipe(vinyl.dest('test/_output'))
+                    .on('finish' , () => {
+                        should(fs.existsSync('test/_output/flatten.txt')).be.true();
+                        done();
+                    })
+            })
+    })
+
 });

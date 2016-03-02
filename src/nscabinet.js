@@ -13,7 +13,8 @@ var PARAMS_DEF = [
     {name: 'script', required : true },
     {name: 'deployment', def: 1},
     {name: 'isCLI', def : false },
-    {name: 'isonline', def : false}
+    {name: 'isonline', def : false} ,
+    {name: 'flatten', def : false}
 ];
 
 
@@ -31,6 +32,10 @@ function upload (params) {
         var that = this,
             fullCwd = path.resolve((params.isCLI) ? nsconfig.CONF_CWD : chunk.cwd),
             remotePath = chunk.path.substr(fullCwd.length+1);
+
+        if (params.flatten) {
+            remotePath = path.basename(remotePath);
+        }
 
         console.log('Uploading ' + remotePath + ' to ' + params.rootPath );
 
@@ -73,6 +78,7 @@ function download (files,params,info) {
         function flush(cb) {
             var data = JSON.parse(buffer);
             if (data.error) {
+                if (!data.error.length) data.error = [data.error];
                 data.error = data.error.map( err => {
                     try {
                         return JSON.parse(err);

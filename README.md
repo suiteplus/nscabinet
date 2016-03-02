@@ -100,6 +100,8 @@ gulp.src('foo.js')
  * `isonline` (boolean) lets you set the uploaded files to be avaliable
    without login.
 
+ * `flatten` all files are uploaded to the root path, regardless of their source path.
+
 ## nscabinet.download( files , [opts] )
 
 ```javascript
@@ -173,7 +175,7 @@ Uploading Views/view.html to /SuiteScripts
 
  - If you add new funcionality, also add a new test!
  
-At the time tests are ran locally. To set up the tests:
+At the time tests are run locally. To set up the tests:
 
  - Install the restlet in an available account;
  
@@ -184,7 +186,7 @@ At the time tests are ran locally. To set up the tests:
  
  
  
- [npm-url]: https://npmjs.org/package/nscabinet
+[npm-url]: https://npmjs.org/package/nscabinet
 [npm-image]: http://img.shields.io/npm/v/nscabinet.svg
 
 [david-url]: https://david-dm.org/suiteplus/nscabinet
