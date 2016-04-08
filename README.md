@@ -68,6 +68,8 @@ __Connection__
  * `script`
 
  * `deployment` defaults to 1.
+ 
+ * `conffile` overrides default `nsconfig.json` file name, allowing multiple project setting.
 
 __Path__
 
