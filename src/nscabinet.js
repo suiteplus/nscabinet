@@ -30,7 +30,7 @@ function upload (params) {
         }
 
         var that = this,
-            fullCwd = path.resolve((params.isCLI) ? nsconfig.CONF_CWD : chunk.cwd),
+            fullCwd = path.resolve((params.isCLI && !params.flatten) ? nsconfig.CONF_CWD : chunk.cwd),
             remotePath = chunk.path.substr(fullCwd.length+1);
 
         if (params.flatten) {
