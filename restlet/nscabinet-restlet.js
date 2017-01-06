@@ -209,7 +209,7 @@ function pathInfo(pathIn, baseIn, createFolders) {
     var absBase = _split.join('/');
     var absBaseSplit = _split.slice(1);
     var hasWildcard = absBaseSplit.some(function (i) { return i == '**'; });
-    var _ext = filename ? filename.split('.')[1] : null;
+    var _ext = filename && (filename.indexOf('.') > 0) ? filename.split('.').pop() : null;
     var prevFolder = null;
     if (!hasWildcard) {
         absBaseSplit.forEach(function (folderName) {
