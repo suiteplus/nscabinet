@@ -5,7 +5,7 @@
 var request = require('request'),
     through = require('through2'),
     vinyl = require('vinyl'),
-    nsconfig = require('nsconfig'),
+    nsconfig = require('../../nsconfig'),
     path = require('path');
 
 var PARAMS_DEF = [
@@ -69,7 +69,7 @@ function download (files,params,info) {
         files : files ,
         rootpath: params.rootPath
     };
-    var buffer = ''; 
+    var buffer = '';
     var emitter = through.obj(
         function transform(data,enc,cb) {
             buffer += data;
@@ -158,17 +158,39 @@ function _requestOpts (params) {
         server = process.env.NS_SERVER || `https://rest.${params.realm}/app/site/hosting/restlet.nl`;
     //NS_SERVER = testing + nsmockup
 
-    return {
-        url: server,
-        qs: {
-            script: params.script,
-            deploy: params.deployment
-        },
-        method : 'POST' ,
-        headers: {
-            authorization: `NLAuth nlauth_account=${params.account},nlauth_email=${params.email},nlauth_signature=${params.password}${nlauthRolePortion}`
-        }
-    };
+    if (params.token) {
+
+        return {
+            url: server,
+            qs: {
+                script: params.script,
+                deploy: params.deployment
+            },
+            method: 'POST',
+            oauth: {
+                consumer_key: params.consumerKey,
+                consumer_secret: params.consumerSecret,
+                token: params.token,
+                token_secret: params.tokenSecret,
+                realm: params.account
+            }
+        };
+
+    } else {
+
+        return {
+            url: server,
+            qs: {
+                script: params.script,
+                deploy: params.deployment
+            },
+            method : 'POST' ,
+            headers: {
+                authorization: `NLAuth nlauth_account=${params.account},nlauth_email=${params.email},nlauth_signature=${params.password}${nlauthRolePortion}`
+            }
+        };
+
+    }
 }
 
 
