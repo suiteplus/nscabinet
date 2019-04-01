@@ -172,6 +172,7 @@ var EXT_TYPES = {
       ico: 'ICON',
       jpg: 'JPGIMAGE',
       js: 'JAVASCRIPT',
+      json: 'PLAINTEXT',
       mov: 'QUICKTIME',
       mp3: 'MP3',
       mpg: 'MPEGMOVIE',
