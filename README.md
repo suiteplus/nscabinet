@@ -7,8 +7,8 @@ _PS: This is actually also a gulp plugin._
 ## Required [![Dependency Status][david-image]][david-url] [![devDependency Status][david-image-dev]][david-url-dev]
 
  * node.js 4+
- 
- 
+
+
 
 ## Quick start
 ```bash
@@ -19,8 +19,8 @@ _PS: This is actually also a gulp plugin._
   - Create a `nsconfig.json` file in the root of you project with at least __email__ , __password__, __account__, __script__ number and __deployment__ number.
 
   - Use it with gulp or with the CLI (see CLI section below)
-    
-  
+
+
 ```javascript
 var nscabinet = require('nscabinet');
 gulp.src('myProject/dist/**/*.js').pipe(nscabinet({ rootPath : '/Templates' }));
@@ -68,7 +68,7 @@ __Connection__
  * `script`
 
  * `deployment` defaults to 1.
- 
+
  * `conffile` overrides default `nsconfig.json` file name, allowing multiple project setting.
 
 __Path__
@@ -77,6 +77,23 @@ __Path__
 
 Example: Upload file with path `img/image.jpg` to rootPath `/Templates` will "upsert" the file
 onto '/Templates/img/image.jpg'.
+
+__Token Based Authentication__
+
+ * `consumerKey`
+
+ * `consumerSecret`
+
+ * `token`
+
+ * `tokenSecret`
+
+Setup:
+ - Enable Token-based Authentication (Enable Features > SuiteCloud > Manage Authentication)
+ - Create an integration record to generate a consumer key and secret
+ - Generate a user token (must enable a role with User Access Tokens permission - Administrator role cannot be used)
+
+The email and password are ignored when token based authentication is used.  (They are still required but can just have placeholder values)
 
 ## nscabinet.upload
 
@@ -113,25 +130,25 @@ nscabinet.download(['MyProject/*.js','/Web Site Hosting Files/My Site/*.html'])
 ```
 
   * `files` file selector (one or many).
-    
+
     * `*` is accepted on the file part. The restlet then runs a file search by name
       in which `*` is replaced with `%`.
-    
+
     * Paths are also relative to `opts.rootPath`. If a file selector begins with `/`, files will be queried
       by absolute path in netsuite, but saved locally inside the `cabinet_root` folder.
-      
+
     * If a path has `/**/`, a recursive search will be done. This can be used to search
       just by file name, regardless of path.
-      
+
     * (PS: While the syntax is similar, don't expect full glob funcionality. It's not a glob!)
-      
-  
+
+
   * `opts` Common options.
 
 
 ## nscabinet.url ( file : string , [opts] ) : Promise[string]
 
-Get the url (internal or external) of a cabinet file. Returns a promise. 
+Get the url (internal or external) of a cabinet file. Returns a promise.
 Useful for email campaign stuff.
 
 Options: receives the ones which make sense here (ex: rootPath, realm, etc...) in the
@@ -176,18 +193,18 @@ Uploading Views/view.html to /SuiteScripts
 ## Contributing
 
  - If you add new funcionality, also add a new test!
- 
+
 At the time tests are run locally. To set up the tests:
 
  - Install the restlet in an available account;
- 
+
  - Set up nsconfig.json, pointing to that account; Don't forget to set
    a rootPath to where the tests will play around and create its lots of files;
- 
+
  - Run 'gulp'
- 
- 
- 
+
+
+
 [npm-url]: https://npmjs.org/package/nscabinet
 [npm-image]: http://img.shields.io/npm/v/nscabinet.svg
 
