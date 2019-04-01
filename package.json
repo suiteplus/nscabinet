@@ -1,6 +1,6 @@
 {
   "name": "nscabinet",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "description": "Upload and download files from netsuite.",
   "engines": {
     "node": ">=4.x",
@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/suiteplus/nscabinet#readme",
   "dependencies": {
-    "nsconfig": "0.5.2",
+    "nsconfig": "0.6.0",
     "request": "^2.64.0",
     "through2": "^2.0.0",
     "vinyl": "^1.0.0",
