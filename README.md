@@ -12,8 +12,10 @@ _PS: This is actually also a gulp plugin._
 
 ## Quick start
 ```bash
-    npm install nscabinet
+    npm install suiteplus/nscabinet
 ```
+> **WARNING**:  The version on npm is outdated, use the command above to install from Github
+
   - Install the __nscabinet restlet__ bundle in your netsuite account (or manually create the script using the file in the repo) *
 
   - Create a `nsconfig.json` file in the root of you project with at least __email__ , __password__, __account__, __script__ number and __deployment__ number.
@@ -55,7 +57,7 @@ The following parameters are common through most of the methods:
 
 __Connection__
 
- * `realm` defaults to `netsuite.com`.
+ * `realm` defaults to `netsuite.com`.  _(No longer used, now using account specific domain based on account #)_
 
  * `role` defaults to the account's default role.
 

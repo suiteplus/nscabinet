@@ -98,7 +98,7 @@ function download (files,params,info) {
                 var localPath = file.path.startsWith('/') ? 'cabinet_root' + file.path : file.path;
                 var vynFile = new vinyl({
                     path : localPath ,
-                    contents : new Buffer(file.contents,'base64')
+                    contents : Buffer.from(file.contents,'base64')
                 });
                 console.log(`Got file ${file.path}.`);
                 this.push(vynFile);
@@ -147,7 +147,7 @@ function url(path, params) {
     return new Promise((resolve,reject) => {
         request( toRequest , (err,resp,body) => {
             if (err) return reject(err);
-            resolve(`https://system.${params.realm}${body.url}`);
+            resolve(`https://${params.account.replace('_', '-')}.app.netsuite.com${body.url}`);
         });
     });
 }
@@ -155,7 +155,7 @@ function url(path, params) {
 
 function _requestOpts (params) {
     var nlauthRolePortion = ( params.role ) ? `,nlauth_role=${params.role}` : '',
-        server = process.env.NS_SERVER || `https://rest.${params.realm}/app/site/hosting/restlet.nl`;
+        server = process.env.NS_SERVER || `https://${params.account.replace('_', '-')}.restlets.api.netsuite.com/app/site/hosting/restlet.nl`;
     //NS_SERVER = testing + nsmockup
 
     var options = {
@@ -174,11 +174,11 @@ function _requestOpts (params) {
             token: params.token,
             token_secret: params.tokenSecret,
             realm: params.account
-        }
+        };
     } else {
         options.headers = {
             authorization: `NLAuth nlauth_account=${params.account},nlauth_email=${params.email},nlauth_signature=${params.password}${nlauthRolePortion}`
-        }
+        };
     }
 
     return options;
