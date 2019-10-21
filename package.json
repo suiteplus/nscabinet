@@ -1,6 +1,6 @@
 {
   "name": "nscabinet",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Upload and download files from netsuite.",
   "engines": {
     "node": ">=4.x",
