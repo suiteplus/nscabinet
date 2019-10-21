@@ -26,7 +26,7 @@
   },
   "homepage": "https://github.com/suiteplus/nscabinet#readme",
   "dependencies": {
-    "nsconfig": "0.6.0",
+    "nsconfig": "github:suiteplus/nsconfig",
     "request": "^2.64.0",
     "through2": "^2.0.0",
     "vinyl": "^1.0.0",
