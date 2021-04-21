@@ -169,6 +169,7 @@ function _requestOpts (params) {
 
     if (params.token) {
         options.oauth = {
+            signature_method: 'HMAC-SHA256',
             consumer_key: params.consumerKey,
             consumer_secret: params.consumerSecret,
             token: params.token,
